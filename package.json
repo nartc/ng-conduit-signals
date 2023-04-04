@@ -2,10 +2,9 @@
     "name": "ng-conduit-signals",
     "version": "0.0.0",
     "scripts": {
-        "ng": "ng",
         "start": "ng serve",
         "build": "ng build",
-        "watch": "ng build --watch --configuration development"
+        "openapi": "ng-openapi-gen"
     },
     "private": true,
     "dependencies": {
@@ -25,6 +24,7 @@
         "@angular-devkit/build-angular": "^16.0.0-next.6",
         "@angular/cli": "~16.0.0-next.6",
         "@angular/compiler-cli": "^16.0.0-next.0",
+        "ng-openapi-gen": "^0.24.1",
         "prettier": "^2.8.7",
         "prettier-plugin-organize-imports": "^3.2.2",
         "typescript": "~5.0.2"
