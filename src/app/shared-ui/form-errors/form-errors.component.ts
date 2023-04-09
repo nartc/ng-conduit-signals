@@ -16,5 +16,5 @@ import { FormErrorsApi } from 'src/app/shared-data-access-form-errors/form-error
     },
 })
 export class SharedUiFormErrors {
-    @Input({ required: true }) errors!: ReturnType<FormErrorsApi['formErrors']>;
+    @Input() errors!: ReturnType<FormErrorsApi['formErrors']>;
 }
