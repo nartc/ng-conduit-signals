@@ -8,26 +8,26 @@
     },
     "private": true,
     "dependencies": {
-        "@angular/animations": "^16.0.0-next.0",
-        "@angular/common": "^16.0.0-next.0",
-        "@angular/compiler": "^16.0.0-next.0",
-        "@angular/core": "^16.0.0-next.0",
-        "@angular/forms": "^16.0.0-next.0",
-        "@angular/platform-browser": "^16.0.0-next.0",
-        "@angular/platform-browser-dynamic": "^16.0.0-next.0",
-        "@angular/router": "^16.0.0-next.0",
-        "rxjs": "~7.8.0",
-        "tslib": "^2.3.0",
-        "zone.js": "~0.13.0"
+        "@angular/animations": "^16.0.0-next.7",
+        "@angular/common": "^16.0.0-next.7",
+        "@angular/compiler": "^16.0.0-next.7",
+        "@angular/core": "^16.0.0-next.7",
+        "@angular/forms": "^16.0.0-next.7",
+        "@angular/platform-browser": "^16.0.0-next.7",
+        "@angular/platform-browser-dynamic": "^16.0.0-next.7",
+        "@angular/router": "^16.0.0-next.7",
+        "rxjs": "^7.8.0",
+        "tslib": "^2.5.0",
+        "zone.js": "^0.13.0"
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "^16.0.0-next.7",
-        "@angular/cli": "~16.0.0-next.7",
-        "@angular/compiler-cli": "^16.0.0-next.0",
+        "@angular/cli": "^16.0.0-next.7",
+        "@angular/compiler-cli": "^16.0.0-next.7",
         "ng-openapi-gen": "^0.24.1",
         "prettier": "^2.8.7",
         "prettier-plugin-organize-imports": "^3.2.2",
-        "typescript": "~5.0.2"
+        "typescript": "^5.0.4"
     },
     "prettier": {
         "semi": true,

@@ -1,7 +1,7 @@
 import { NgIf } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AUTH_API } from './shared-data-access-auth/auth-api.di';
+import { injectAuthApi } from './shared-data-access-auth/auth-api.di';
 
 @Component({
     selector: 'app-root',
@@ -15,7 +15,7 @@ import { AUTH_API } from './shared-data-access-auth/auth-api.di';
     `,
 })
 export class AppComponent {
-    protected readonly authApi = inject(AUTH_API);
+    protected readonly authApi = injectAuthApi();
 
     ngOnInit() {
         this.authApi.init();

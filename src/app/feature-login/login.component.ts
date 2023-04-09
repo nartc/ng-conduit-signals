@@ -1,8 +1,8 @@
 import { NgFor, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { LOGIN_API, provideLoginApi } from '../data-access-login/login-api.di';
+import { injectLoginApi, provideLoginApi } from '../data-access-login/login-api.di';
 import { LoginUser } from '../shared-data-access-api';
 import { SharedUiFormErrors } from '../shared-ui/form-errors/form-errors.component';
 import { SharedUiFormLayout } from '../shared-ui/form-layout/form-layout.component';
@@ -51,7 +51,7 @@ import { SharedUiFormLayout } from '../shared-ui/form-layout/form-layout.compone
     providers: [provideLoginApi()],
 })
 export default class Login {
-    protected readonly loginApi = inject(LOGIN_API);
+    protected readonly loginApi = injectLoginApi();
 
     protected loginUser: LoginUser = {
         email: '',

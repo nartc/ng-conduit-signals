@@ -1,8 +1,8 @@
 import { NgFor, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { REGISTER_API, provideRegisterApi } from '../data-access-register/register-api.di';
+import { injectRegisterApi, provideRegisterApi } from '../data-access-register/register-api.di';
 import { NewUser } from '../shared-data-access-api';
 import { SharedUiFormErrors } from '../shared-ui/form-errors/form-errors.component';
 import { SharedUiFormLayout } from '../shared-ui/form-layout/form-layout.component';
@@ -61,7 +61,7 @@ import { SharedUiFormLayout } from '../shared-ui/form-layout/form-layout.compone
     providers: [provideRegisterApi()],
 })
 export default class Register {
-    protected readonly registerApi = inject(REGISTER_API);
+    protected readonly registerApi = injectRegisterApi();
 
     protected newUser: NewUser = {
         username: '',
