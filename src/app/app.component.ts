@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { injectAuthApi } from './shared-data-access-auth/auth-api.di';
 
@@ -14,10 +14,10 @@ import { injectAuthApi } from './shared-data-access-auth/auth-api.di';
         </ng-template>
     `,
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     protected readonly authApi = injectAuthApi();
 
     ngOnInit() {
-        this.authApi.init();
+        this.authApi.refresh();
     }
 }

@@ -28,15 +28,19 @@ type CreateInjectionTokenOptions<
         extraProviders?: Provider;
     };
 
+type InjectFn<
+    TFactory extends (...args: any[]) => any,
+    TFactoryReturn extends ReturnType<TFactory> = ReturnType<TFactory>
+> = {
+    (): TFactoryReturn;
+    (injectOptions: InjectOptions & { optional?: false }): TFactoryReturn;
+    (injectOptions: InjectOptions): TFactoryReturn | null;
+};
+
 type CreateInjectionTokenReturn<
     TFactory extends (...args: any[]) => any,
     TFactoryReturn extends ReturnType<TFactory> = ReturnType<TFactory>
-> = [
-    // TODO: this should take into account { optional: true }
-    (injectOptions?: InjectOptions) => TFactoryReturn,
-    () => Provider,
-    InjectionToken<TFactoryReturn>
-];
+> = [InjectFn<TFactory, TFactoryReturn>, () => Provider, InjectionToken<TFactoryReturn>];
 
 function createInjectFn<TValue>(token: InjectionToken<TValue>) {
     return (injectOptions?: InjectOptions) => inject(token, injectOptions as InjectOptions);

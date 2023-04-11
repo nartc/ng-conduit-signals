@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { nonAuthGuard } from '../shared-data-access-auth/non-auth.guard';
+import { authGuard } from '../shared-data-access-auth/auth.guard';
 
 export default [
     {
@@ -8,12 +8,12 @@ export default [
     },
     {
         path: 'register',
-        canMatch: [nonAuthGuard()],
+        canMatch: [authGuard('unprotected')],
         loadComponent: () => import('../feature-register/register.component'),
     },
     {
         path: 'login',
-        canMatch: [nonAuthGuard()],
+        canMatch: [authGuard('unprotected')],
         loadComponent: () => import('../feature-login/login.component'),
     },
 ] as Routes;

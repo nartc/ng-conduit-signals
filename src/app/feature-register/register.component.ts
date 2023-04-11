@@ -50,7 +50,11 @@ import { SharedUiFormLayout } from '../shared-ui/form-layout/form-layout.compone
                         required
                     />
                 </fieldset>
-                <button type="submit" class="btn btn-lg btn-primary pull-xs-right" [disabled]="!form.valid">
+                <button
+                    type="submit"
+                    class="btn btn-lg btn-primary pull-xs-right"
+                    [disabled]="!form.valid || registerApi.isLoading()"
+                >
                     Sign up
                 </button>
             </form>
@@ -63,11 +67,7 @@ import { SharedUiFormLayout } from '../shared-ui/form-layout/form-layout.compone
 export default class Register {
     protected readonly registerApi = injectRegisterApi();
 
-    protected newUser: NewUser = {
-        username: '',
-        email: '',
-        password: '',
-    };
+    protected newUser: NewUser = { username: '', email: '', password: '' };
 
     submit() {
         this.registerApi.register(this.newUser);

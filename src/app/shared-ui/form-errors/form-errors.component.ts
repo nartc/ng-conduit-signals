@@ -1,6 +1,6 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { FormErrorsApi } from 'src/app/shared-data-access-form-errors/form-errors-api.factory';
+import { FormErrorsApi } from '../../shared-data-access-form-errors/form-errors-api.factory';
 
 @Component({
     selector: 'app-shared-ui-form-errors',

@@ -40,7 +40,11 @@ import { SharedUiFormLayout } from '../shared-ui/form-layout/form-layout.compone
                         password
                     />
                 </fieldset>
-                <button type="submit" class="btn btn-lg btn-primary pull-xs-right" [disabled]="!form.valid">
+                <button
+                    type="submit"
+                    class="btn btn-lg btn-primary pull-xs-right"
+                    [disabled]="!form.valid || loginApi.isLoading()"
+                >
                     Sign in
                 </button>
             </form>
@@ -53,10 +57,7 @@ import { SharedUiFormLayout } from '../shared-ui/form-layout/form-layout.compone
 export default class Login {
     protected readonly loginApi = injectLoginApi();
 
-    protected loginUser: LoginUser = {
-        email: '',
-        password: '',
-    };
+    protected loginUser: LoginUser = { email: '', password: '' };
 
     submit() {
         this.loginApi.login(this.loginUser);

@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { injectFavoriteApi } from '../data-access-home/favorite-api.di';
 import { injectHomeApi, provideHomeApi } from '../data-access-home/home-api.di';
-import { injectTagsApi } from '../data-access-home/tags-api.di';
+import { injectTagsApi, provideTagsApi } from '../data-access-home/tags-api.di';
 import { injectAuthApi } from '../shared-data-access-auth/auth-api.di';
+import { SharedUiArticlesList } from '../shared-ui/articles-list/articles-list.component';
 import { UiHomeBanner } from '../ui-home/banner/banner.component';
 import { UiHomeFeedToggle } from '../ui-home/feed-toggle/feed-toggle.component';
 import { UiHomeTags } from '../ui-home/tags/tags.component';
@@ -15,11 +17,16 @@ import { UiHomeTags } from '../ui-home/tags/tags.component';
             <div class="row">
                 <div class="col-md-9">
                     <app-ui-home-feed-toggle
-                        [selectedTag]="tagsApi.selectedTag()"
+                        [selectedTag]="homeApi.selectedTag()"
                         [isFeedDisabled]="!authApi.isAuthenticated()"
                         [feedType]="homeApi.feedType()"
-                        (selectFeed)="onFeedSelected()"
-                        (selectGlobal)="onGlobalSelected()"
+                        (selectFeed)="homeApi.getArticles('feed')"
+                        (selectGlobal)="homeApi.getArticles('global')"
+                    />
+                    <app-shared-ui-articles-list
+                        [status]="homeApi.status()"
+                        [articles]="homeApi.articles()"
+                        (toggleFavorite)="favoriteApi.toggleFavorite($event)"
                     />
                 </div>
 
@@ -27,7 +34,7 @@ import { UiHomeTags } from '../ui-home/tags/tags.component';
                     <app-ui-home-tags
                         [status]="tagsApi.status()"
                         [tags]="tagsApi.tags()"
-                        (selectTag)="onTagSelected($event)"
+                        (selectTag)="homeApi.getArticles('tag', $event)"
                     >
                         <p>Loading...</p>
                     </app-ui-home-tags>
@@ -36,27 +43,18 @@ import { UiHomeTags } from '../ui-home/tags/tags.component';
         </div>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideHomeApi()],
+    providers: [provideHomeApi(), provideTagsApi()],
     host: { class: 'block home-page' },
-    imports: [UiHomeBanner, UiHomeTags, UiHomeFeedToggle],
+    imports: [UiHomeBanner, UiHomeTags, UiHomeFeedToggle, SharedUiArticlesList],
 })
-export default class Home {
+export default class Home implements OnInit {
     protected readonly homeApi = injectHomeApi();
+    protected readonly favoriteApi = injectFavoriteApi();
     protected readonly tagsApi = injectTagsApi();
     protected readonly authApi = injectAuthApi();
 
-    onTagSelected(tag: string) {
-        this.tagsApi.selectTag(tag);
-        this.homeApi.setFeedType('tag');
-    }
-
-    onFeedSelected() {
-        this.tagsApi.selectTag('');
-        this.homeApi.setFeedType('feed');
-    }
-
-    onGlobalSelected() {
-        this.tagsApi.selectTag('');
-        this.homeApi.setFeedType('global');
+    ngOnInit() {
+        this.tagsApi.getTags();
+        this.homeApi.getArticles('global');
     }
 }

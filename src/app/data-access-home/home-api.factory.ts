@@ -1,49 +1,46 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { computed, signal } from '@angular/core';
-import { fromObservable, fromSignal } from '@angular/core/rxjs-interop';
-import { catchError, defer, map, of, switchMap } from 'rxjs';
-import { ArticlesApiClient } from '../shared-data-access-api';
+import { defer, lastValueFrom } from 'rxjs';
+import { Article, ArticlesApiClient } from '../shared-data-access-api';
 import { ApiStatus } from '../shared-data-access-models/api-status';
 import { FeedType } from '../shared-data-access-models/feed-type';
 import { FavoriteApi } from './favorite-api.factory';
-import { TagsApi } from './tags-api.factory';
 
-export function homeApiFactory(tagsApi: TagsApi, favoriteApi: FavoriteApi, articlesApiClient: ArticlesApiClient) {
-    const status = signal<ApiStatus>('loading');
+export function homeApiFactory(favoriteApi: FavoriteApi, articlesApiClient: ArticlesApiClient) {
+    const status = signal<ApiStatus>('idle');
     const feedType = signal<FeedType>('global');
+    const selectedTag = signal('');
+    const articles = signal<Article[]>([]);
 
-    const articles = fromObservable(
-        fromSignal(feedType).pipe(
-            // tap(() => status() !== 'loading' && status.set('loading')),
-            switchMap((type) =>
-                defer(() => {
-                    if (type === 'feed') return articlesApiClient.getArticlesFeed();
-                    if (type === 'tag' && tagsApi.selectedTag()) {
-                        // TODO so nested fromSignal is a no-no
-                        // return fromSignal(tagsApi.selectedTag).pipe(
-                        // switchMap((selectedTag) => articlesApiClient.getArticles({ tag: selectedTag }))
-                        // );
-                        return articlesApiClient.getArticles({ tag: tagsApi.selectedTag() });
-                    }
-                    return articlesApiClient.getArticles();
-                }).pipe(
-                    map((response) => {
-                        // status.set('success');
-                        return response.articles;
-                    }),
-                    catchError(({ error }: HttpErrorResponse) => {
-                        console.error(`Error getting articles -->`, error);
-                        return of([]);
-                    })
-                )
-            )
-            // TODO why do we need this?
-            // - If we shouldn't do this, what should we do
-            // if we want to have loading state toggled between Data Fetch stages?
-            // observeOn(asapScheduler)
-        ),
-        []
-    );
+    const getArticles = (type: FeedType, tag?: string) => {
+        status.set('loading');
+        feedType.set(type);
+
+        if (tag) {
+            selectedTag.set(tag);
+        } else {
+            selectedTag.set('');
+        }
+
+        lastValueFrom(
+            defer(() => {
+                if (type === 'feed') return articlesApiClient.getArticlesFeed();
+                if (type === 'tag' && tag) {
+                    return articlesApiClient.getArticles({ tag });
+                }
+                return articlesApiClient.getArticles();
+            })
+        )
+            .then((response) => {
+                status.set('success');
+                articles.set(response.articles);
+            })
+            .catch(({ error }: HttpErrorResponse) => {
+                console.error(`Error getting articles -->`, error);
+                status.set('error');
+                articles.set([]);
+            });
+    };
 
     return {
         articles: computed(() => {
@@ -59,7 +56,8 @@ export function homeApiFactory(tagsApi: TagsApi, favoriteApi: FavoriteApi, artic
         }),
         status: () => status(),
         feedType: () => feedType(),
-        setFeedType: (data: FeedType) => feedType.set(data),
+        selectedTag: () => selectedTag(),
+        getArticles,
     };
 }
 
