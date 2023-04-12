@@ -1,27 +1,64 @@
-# NgConduitSignals
+# ![RealWorld Example App](logo.png)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.0-next.6.
+> ### Angular 16@next with Signals codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld) spec and API.
 
-## Development server
+### [Demo](https://stackblitz.com/github/nartc/ng-conduit-signals?preset=node/)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+This codebase was created to demonstrate a fully fledged Front-end application built with **Angular 16@next w/ Signals** including CRUD operations, authentication, routing, pagination, and more.
 
-## Code scaffolding
+This is to explore and showcase how **Angular 16@next w/ Signals** would look like in a project.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+For more information on how to this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
 
-## Build
+# Disclaimer
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+This implementation takes on the **Extreme Signals** approach in order to find a common ground where RxJS and Signals can
+coexist happily in an Angular project.
 
-## Running unit tests
+I'm forcing myself to go as far as I could **without RxJS** so please keep that in mind. This implementation is also an
+open invitation for you to tweak where you think RxJS makes more sense.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+# How it works
 
-## Running end-to-end tests
+> Describe the general architecture of your app here
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+-   API Clients are generated via `ng-openapi-generator` and they stay as Observables and are invoked with `lastValueFrom` to convert to Promise
+-   `withComponentInputBinding` is also utilized for binding Route data to Routed Components' Inputs (check `feature-article`)
+-   API calls happen based on User Events/Actions (click something, submit somthing, navigate into a component etc...) rather than Observable Stream
+-   `status` (`ApiStatus`) signal is a bit of a pain-point and should be abstracted better. Usually when we work with API calls and RxJS, we'd usually have
 
-## Further help
+```ts
+this.trigger$.pipe(
+    tap(() => this.loading$.next(true)),
+    switchMap(() =>
+        this.service.getData().pipe(
+            tap({
+                finalize: () => {
+                    this.loading$.next(false);
+                },
+            })
+        )
+    )
+);
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+This pattern is a bit _awkward_ with Signals if we want to keep _declarative_ mindset. `effect()` (and `toObservable()/fromSignal()` internally uses `effect()`) doesn't allow
+writes to Signals by default. It's tricky to have:
+
+```ts
+effect(() => {
+    this.loadin.set(true); // this is not
+    const sub = this.service.getData().subscribe(() => {
+        this.loading.set(false); // this is fine
+    });
+});
+```
+
+-   Without RxJS, we do forgo some forms of Race Condition handling as well as Cancellation. I'd assume the ecosystem like NgRx, RxAngular, NgXS are going to come up with
+    some abstractions for this. The point is on the consumers' code, we don't need to think about RxJS vs Signals. It depends on the public APIs of these ecosystems.
+-   `authGuard` still uses RxJS because I need the Guard to **wait** for the `AuthService`to have a chance to determine the initial authentication status.
+
+# Getting started
+
+-   `npm install`
+-   `npm run serve`
