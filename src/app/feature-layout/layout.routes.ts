@@ -17,6 +17,11 @@ export default [
         loadChildren: () => import('../feature-editor/editor.routes'),
     },
     {
+        path: 'profile/:username',
+        canMatch: [authGuard('protected')],
+        loadChildren: () => import('../feature-profile/profile.routes'),
+    },
+    {
         path: 'article/:slug',
         canMatch: [authGuard('protected')],
         loadComponent: () => import('../feature-article/article.component'),
