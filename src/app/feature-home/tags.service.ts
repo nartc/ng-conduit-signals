@@ -6,27 +6,25 @@ import { ApiStatus } from '../shared-data-access-models/api-status';
 
 @Injectable()
 export class TagsService {
-    private readonly tagsApiClient = inject(TagsApiClient);
+    readonly #tagsApiClient = inject(TagsApiClient);
 
-    private readonly status = signal<ApiStatus>('idle');
-    private readonly tags = signal<string[]>([]);
+    readonly #status = signal<ApiStatus>('idle');
+    readonly #tags = signal<string[]>([]);
 
-    readonly vm = {
-        tags: () => this.tags(),
-        status: () => this.status(),
-    };
+    readonly tags = () => this.#tags();
+    readonly status = () => this.#status();
 
     getTags() {
-        this.status.set('loading');
-        lastValueFrom(this.tagsApiClient.getTags())
+        this.#status.set('loading');
+        lastValueFrom(this.#tagsApiClient.getTags())
             .then((response) => {
-                this.status.set('success');
-                this.tags.set(response.tags);
+                this.#status.set('success');
+                this.#tags.set(response.tags);
             })
             .catch(({ error }: HttpErrorResponse) => {
                 console.error('Error getting tags -->', error);
-                this.status.set('error');
-                this.tags.set([]);
+                this.#status.set('error');
+                this.#tags.set([]);
             });
     }
 }

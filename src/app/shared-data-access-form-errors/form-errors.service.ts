@@ -1,4 +1,4 @@
-import { computed, signal } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
 
 function processErrorsRecord(errors: Record<string, string[]>): {
     errors: string[];
@@ -13,12 +13,10 @@ function processErrorsRecord(errors: Record<string, string[]>): {
         hasError: errorEntries.length > 0,
     };
 }
+
+@Injectable()
 export class FormErrorsService {
-    private readonly errors = signal<Record<string, string[]>>({});
-
-    readonly vm = {
-        formErrors: computed(() => processErrorsRecord(this.errors())),
-    };
-
-    setErrors = this.errors.set.bind(this.errors);
+    readonly #errors = signal<Record<string, string[]>>({});
+    readonly formErrors = computed(() => processErrorsRecord(this.#errors()));
+    setErrors = this.#errors.set.bind(this.#errors);
 }

@@ -17,9 +17,9 @@ import { RegisterService } from './register.service';
                 <a routerLink="/login">Have an account?</a>
             </p>
 
-            <app-shared-ui-form-errors [errors]="registerService.vm.errors()" />
+            <app-shared-ui-form-errors [errors]="registerService.errors()" />
 
-            <form #form="ngForm" (ngSubmit)="submit()">
+            <form #form="ngForm" (ngSubmit)="registerService.register(newUser)">
                 <fieldset class="form-group">
                     <input
                         [(ngModel)]="newUser.username"
@@ -54,7 +54,7 @@ import { RegisterService } from './register.service';
                 <button
                     type="submit"
                     class="btn btn-lg btn-primary pull-xs-right"
-                    [disabled]="!form.valid || registerService.vm.isLoading()"
+                    [disabled]="!form.valid || registerService.isLoading()"
                 >
                     Sign up
                 </button>
@@ -69,8 +69,4 @@ export default class Register {
     protected readonly registerService = inject(RegisterService);
 
     protected newUser: NewUser = { username: '', email: '', password: '' };
-
-    submit() {
-        this.registerService.register(this.newUser);
-    }
 }

@@ -16,6 +16,7 @@
         "@angular/platform-browser": "^16.0.0-next.7",
         "@angular/platform-browser-dynamic": "^16.0.0-next.7",
         "@angular/router": "^16.0.0-next.7",
+        "marked": "^4.3.0",
         "rxjs": "^7.8.0",
         "tslib": "^2.5.0",
         "zone.js": "^0.13.0"
@@ -24,6 +25,7 @@
         "@angular-devkit/build-angular": "^16.0.0-next.7",
         "@angular/cli": "^16.0.0-next.7",
         "@angular/compiler-cli": "^16.0.0-next.7",
+        "@types/marked": "^4.0.8",
         "ng-openapi-gen": "^0.24.1",
         "prettier": "^2.8.7",
         "prettier-plugin-organize-imports": "^3.2.2",

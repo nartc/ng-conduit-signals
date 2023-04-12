@@ -6,31 +6,26 @@ import { ApiStatus } from '../shared-data-access-models/api-status';
 
 @Injectable()
 export class FavoriteArticleService {
-    private readonly favoritesApiClient = inject(FavoritesApiClient);
+    readonly #favoritesApiClient = inject(FavoritesApiClient);
+    readonly #status = signal<ApiStatus>('idle');
 
-    private readonly status = signal<ApiStatus>('idle');
-    private readonly toggledFavorite = signal<Article | null>(null);
-
-    readonly vm = {
-        status: () => this.status(),
-        toggledFavorite: () => this.toggledFavorite(),
-    };
+    readonly status = () => this.#status();
 
     toggleFavorite(article: Article) {
-        this.status.set('loading');
-        lastValueFrom(
+        this.#status.set('loading');
+        return lastValueFrom(
             article.favorited
-                ? this.favoritesApiClient.deleteArticleFavorite({ slug: article.slug })
-                : this.favoritesApiClient.createArticleFavorite({ slug: article.slug })
+                ? this.#favoritesApiClient.deleteArticleFavorite({ slug: article.slug })
+                : this.#favoritesApiClient.createArticleFavorite({ slug: article.slug })
         )
             .then((response) => {
-                this.status.set('success');
-                this.toggledFavorite.set(response.article);
+                this.#status.set('success');
+                return response.article;
             })
             .catch(({ error }: HttpErrorResponse) => {
                 console.error(`Error toggle favorite for ${article.slug}`, error);
-                this.status.set('error');
-                this.toggledFavorite.set(null);
+                this.#status.set('error');
+                return null;
             });
     }
 }

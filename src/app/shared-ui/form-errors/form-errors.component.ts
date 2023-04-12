@@ -16,5 +16,5 @@ import type { FormErrorsService } from '../../shared-data-access-form-errors/for
     },
 })
 export class SharedUiFormErrors {
-    @Input() errors!: ReturnType<FormErrorsService['vm']['formErrors']>;
+    @Input() errors!: ReturnType<FormErrorsService['formErrors']>;
 }

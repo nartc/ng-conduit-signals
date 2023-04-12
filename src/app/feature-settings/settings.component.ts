@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { UpdateUser } from '../shared-data-access-api';
 import { SettingsService } from './settings.service';
 
@@ -64,7 +64,7 @@ import { SettingsService } from './settings.service';
                             <button
                                 type="submit"
                                 class="btn btn-lg btn-primary pull-xs-right"
-                                [disabled]="form.invalid || settingsService.vm.isLoading()"
+                                [disabled]="form.invalid || settingsService.isLoading()"
                             >
                                 Update Settings
                             </button>
@@ -80,7 +80,7 @@ import { SettingsService } from './settings.service';
             </div>
         </div>
     `,
-    imports: [ReactiveFormsModule, FormsModule],
+    imports: [FormsModule],
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [SettingsService],
     host: { class: 'block settings-page' },
@@ -91,7 +91,7 @@ export default class Settings {
 
     constructor() {
         effect(() => {
-            const user = this.settingsService.vm.user();
+            const user = this.settingsService.user();
             if (user) {
                 this.updateUser = structuredClone(user);
                 this.updateUser.password = '';

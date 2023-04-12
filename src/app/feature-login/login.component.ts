@@ -17,9 +17,9 @@ import { LoginService } from './login.service';
                 <a routerLink="/register">Need an account?</a>
             </p>
 
-            <app-shared-ui-form-errors [errors]="loginService.vm.errors()" />
+            <app-shared-ui-form-errors [errors]="loginService.errors()" />
 
-            <form #form="ngForm" (ngSubmit)="submit()">
+            <form #form="ngForm" (ngSubmit)="loginService.login(loginUser)">
                 <fieldset class="form-group">
                     <input
                         [(ngModel)]="loginUser.email"
@@ -44,7 +44,7 @@ import { LoginService } from './login.service';
                 <button
                     type="submit"
                     class="btn btn-lg btn-primary pull-xs-right"
-                    [disabled]="!form.valid || loginService.vm.isLoading()"
+                    [disabled]="!form.valid || loginService.isLoading()"
                 >
                     Sign in
                 </button>
@@ -59,8 +59,4 @@ export default class Login {
     protected readonly loginService = inject(LoginService);
 
     protected loginUser: LoginUser = { email: '', password: '' };
-
-    submit() {
-        this.loginService.login(this.loginUser);
-    }
 }

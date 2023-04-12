@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 import { NewUser, UserAndAuthenticationApiClient } from '../shared-data-access-api';
 import { AuthService } from '../shared-data-access-auth/auth.service';
@@ -8,31 +8,29 @@ import { ApiStatus } from '../shared-data-access-models/api-status';
 
 @Injectable()
 export class RegisterService {
-    private readonly userAndAuthenticationApiClient = inject(UserAndAuthenticationApiClient);
-    private readonly authService = inject(AuthService);
-    private readonly formErrorsService = inject(FormErrorsService);
+    readonly #userAndAuthenticationApiClient = inject(UserAndAuthenticationApiClient);
+    readonly #authService = inject(AuthService);
+    readonly #formErrorsService = inject(FormErrorsService);
 
-    private readonly status = signal<ApiStatus>('idle');
+    readonly #status = signal<ApiStatus>('idle');
 
-    readonly vm = {
-        errors: this.formErrorsService.vm.formErrors,
-        isLoading: () => this.status() === 'loading',
-    };
+    readonly errors = this.#formErrorsService.formErrors;
+    readonly isLoading = computed(() => this.#status() === 'loading');
 
     register(data: NewUser) {
-        this.status.set('loading');
-        lastValueFrom(this.userAndAuthenticationApiClient.createUser({ body: { user: data } }))
+        this.#status.set('loading');
+        lastValueFrom(this.#userAndAuthenticationApiClient.createUser({ body: { user: data } }))
             .then((response) => {
-                this.status.set('success');
+                this.#status.set('success');
                 localStorage.setItem('ng-conduit-signals-token', response.user.token);
                 localStorage.setItem('ng-conduit-signals-user', JSON.stringify(response.user));
-                this.authService.authenticate();
+                this.#authService.authenticate();
             })
             .catch(({ error }: HttpErrorResponse) => {
-                this.status.set('error');
+                this.#status.set('error');
                 console.error('error registering new user: ', error);
                 if (error.errors) {
-                    this.formErrorsService.setErrors(error.errors);
+                    this.#formErrorsService.setErrors(error.errors);
                 }
             });
     }

@@ -9,8 +9,8 @@ export function authGuard(type: 'protected' | 'unprotected'): CanMatchFn {
         const router = inject(Router);
         const authService = inject(AuthService);
 
-        return fromSignal(authService.vm.isAuthenticated).pipe(
-            filter(() => !authService.vm.isAuthenticating()),
+        return fromSignal(authService.isAuthenticated).pipe(
+            filter(() => !authService.isAuthenticating()),
             map((isAuthenticated) => {
                 if ((type === 'unprotected' && !isAuthenticated) || (type === 'protected' && isAuthenticated))
                     return true;

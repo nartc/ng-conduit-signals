@@ -17,23 +17,23 @@ import { TagsService } from './tags.service';
             <div class="row">
                 <div class="col-md-9">
                     <app-ui-home-feed-toggle
-                        [selectedTag]="homeService.vm.selectedTag()"
-                        [isFeedDisabled]="!authService.vm.isAuthenticated()"
-                        [feedType]="homeService.vm.feedType()"
+                        [selectedTag]="homeService.selectedTag()"
+                        [isFeedDisabled]="!authService.isAuthenticated()"
+                        [feedType]="homeService.feedType()"
                         (selectFeed)="homeService.getArticles('feed')"
                         (selectGlobal)="homeService.getArticles('global')"
                     />
                     <app-shared-ui-articles-list
-                        [status]="homeService.vm.status()"
-                        [articles]="homeService.vm.articles()"
+                        [status]="homeService.status()"
+                        [articles]="homeService.articles()"
                         (toggleFavorite)="favoriteArticleService.toggleFavorite($event)"
                     />
                 </div>
 
                 <div class="col-md-3">
                     <app-ui-home-tags
-                        [status]="tagsService.vm.status()"
-                        [tags]="tagsService.vm.tags()"
+                        [status]="tagsService.status()"
+                        [tags]="tagsService.tags()"
                         (selectTag)="homeService.getArticles('tag', $event)"
                     >
                         <p>Loading...</p>

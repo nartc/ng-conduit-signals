@@ -7,10 +7,7 @@ import { UiLayoutHeader } from '../ui-layout/header/header.component';
 @Component({
     standalone: true,
     template: `
-        <app-ui-layout-header
-            [username]="authService.vm.username()"
-            [isAuthenticated]="authService.vm.isAuthenticated()"
-        />
+        <app-ui-layout-header [username]="authService.username()" [isAuthenticated]="authService.isAuthenticated()" />
         <router-outlet />
         <app-ui-layout-footer />
     `,
