@@ -7,6 +7,11 @@ export default [
         loadComponent: () => import('../feature-home/home.component'),
     },
     {
+        path: 'settings',
+        canMatch: [authGuard('protected')],
+        loadComponent: () => import('../feature-settings/settings.component'),
+    },
+    {
         path: 'register',
         canMatch: [authGuard('unprotected')],
         loadComponent: () => import('../feature-register/register.component'),
