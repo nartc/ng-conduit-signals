@@ -1,6 +1,6 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { FormErrorsApi } from '../../shared-data-access-form-errors/form-errors-api.factory';
+import type { FormErrorsService } from '../../shared-data-access-form-errors/form-errors.service';
 
 @Component({
     selector: 'app-shared-ui-form-errors',
@@ -16,5 +16,5 @@ import { FormErrorsApi } from '../../shared-data-access-form-errors/form-errors-
     },
 })
 export class SharedUiFormErrors {
-    @Input() errors!: ReturnType<FormErrorsApi['formErrors']>;
+    @Input() errors!: ReturnType<FormErrorsService['vm']['formErrors']>;
 }

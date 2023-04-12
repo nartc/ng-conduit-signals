@@ -1,11 +1,12 @@
 import { NgFor, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { injectRegisterApi, provideRegisterApi } from '../data-access-register/register-api.di';
 import { NewUser } from '../shared-data-access-api';
+import { FormErrorsService } from '../shared-data-access-form-errors/form-errors.service';
 import { SharedUiFormErrors } from '../shared-ui/form-errors/form-errors.component';
 import { SharedUiFormLayout } from '../shared-ui/form-layout/form-layout.component';
+import { RegisterService } from './register.service';
 
 @Component({
     standalone: true,
@@ -16,7 +17,7 @@ import { SharedUiFormLayout } from '../shared-ui/form-layout/form-layout.compone
                 <a routerLink="/login">Have an account?</a>
             </p>
 
-            <app-shared-ui-form-errors [errors]="registerApi.errors()" />
+            <app-shared-ui-form-errors [errors]="registerService.vm.errors()" />
 
             <form #form="ngForm" (ngSubmit)="submit()">
                 <fieldset class="form-group">
@@ -53,7 +54,7 @@ import { SharedUiFormLayout } from '../shared-ui/form-layout/form-layout.compone
                 <button
                     type="submit"
                     class="btn btn-lg btn-primary pull-xs-right"
-                    [disabled]="!form.valid || registerApi.isLoading()"
+                    [disabled]="!form.valid || registerService.vm.isLoading()"
                 >
                     Sign up
                 </button>
@@ -62,14 +63,14 @@ import { SharedUiFormLayout } from '../shared-ui/form-layout/form-layout.compone
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [SharedUiFormLayout, SharedUiFormErrors, NgIf, NgFor, RouterLink, FormsModule],
-    providers: [provideRegisterApi()],
+    providers: [RegisterService, FormErrorsService],
 })
 export default class Register {
-    protected readonly registerApi = injectRegisterApi();
+    protected readonly registerService = inject(RegisterService);
 
     protected newUser: NewUser = { username: '', email: '', password: '' };
 
     submit() {
-        this.registerApi.register(this.newUser);
+        this.registerService.register(this.newUser);
     }
 }

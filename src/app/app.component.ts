@@ -1,23 +1,23 @@
 import { NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { injectAuthApi } from './shared-data-access-auth/auth-api.di';
+import { AuthService } from './shared-data-access-auth/auth.service';
 
 @Component({
     selector: 'app-root',
     standalone: true,
     imports: [RouterOutlet, NgIf],
     template: `
-        <ng-container *ngIf="authApi.isAuthenticating(); else done">Loading...</ng-container>
+        <ng-container *ngIf="authService.vm.isAuthenticating(); else done">Loading...</ng-container>
         <ng-template #done>
             <router-outlet />
         </ng-template>
     `,
 })
 export class AppComponent implements OnInit {
-    protected readonly authApi = injectAuthApi();
+    protected readonly authService = inject(AuthService);
 
     ngOnInit() {
-        this.authApi.refresh();
+        this.authService.refresh();
     }
 }

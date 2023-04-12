@@ -2,15 +2,15 @@ import { inject } from '@angular/core';
 import { fromSignal } from '@angular/core/rxjs-interop';
 import { CanMatchFn, Router } from '@angular/router';
 import { filter, map } from 'rxjs';
-import { injectAuthApi } from './auth-api.di';
+import { AuthService } from './auth.service';
 
 export function authGuard(type: 'protected' | 'unprotected'): CanMatchFn {
     return () => {
         const router = inject(Router);
-        const authApi = injectAuthApi();
+        const authService = inject(AuthService);
 
-        return fromSignal(authApi.isAuthenticated).pipe(
-            filter(() => !authApi.isAuthenticating()),
+        return fromSignal(authService.vm.isAuthenticated).pipe(
+            filter(() => !authService.vm.isAuthenticating()),
             map((isAuthenticated) => {
                 if ((type === 'unprotected' && !isAuthenticated) || (type === 'protected' && isAuthenticated))
                     return true;

@@ -1,13 +1,16 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { injectAuthApi } from '../shared-data-access-auth/auth-api.di';
+import { AuthService } from '../shared-data-access-auth/auth.service';
 import { UiLayoutFooter } from '../ui-layout/footer/footer.component';
 import { UiLayoutHeader } from '../ui-layout/header/header.component';
 
 @Component({
     standalone: true,
     template: `
-        <app-ui-layout-header [username]="authApi.username()" [isAuthenticated]="authApi.isAuthenticated()" />
+        <app-ui-layout-header
+            [username]="authService.vm.username()"
+            [isAuthenticated]="authService.vm.isAuthenticated()"
+        />
         <router-outlet />
         <app-ui-layout-footer />
     `,
@@ -15,5 +18,5 @@ import { UiLayoutHeader } from '../ui-layout/header/header.component';
     imports: [UiLayoutHeader, UiLayoutFooter, RouterOutlet],
 })
 export default class Layout {
-    protected readonly authApi = injectAuthApi();
+    protected readonly authService = inject(AuthService);
 }

@@ -13,16 +13,12 @@ function processErrorsRecord(errors: Record<string, string[]>): {
         hasError: errorEntries.length > 0,
     };
 }
+export class FormErrorsService {
+    private readonly errors = signal<Record<string, string[]>>({});
 
-export function formErrorsApiFactory() {
-    const errors = signal<Record<string, string[]>>({});
-
-    const formErrors = computed(() => processErrorsRecord(errors()));
-
-    return {
-        formErrors,
-        updateErrors: errors.set.bind(errors),
+    readonly vm = {
+        formErrors: computed(() => processErrorsRecord(this.errors())),
     };
-}
 
-export type FormErrorsApi = ReturnType<typeof formErrorsApiFactory>;
+    setErrors = this.errors.set.bind(this.errors);
+}

@@ -1,12 +1,12 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { injectFavoriteApi } from '../data-access-home/favorite-api.di';
-import { injectHomeApi, provideHomeApi } from '../data-access-home/home-api.di';
-import { injectTagsApi, provideTagsApi } from '../data-access-home/tags-api.di';
-import { injectAuthApi } from '../shared-data-access-auth/auth-api.di';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
+import { AuthService } from '../shared-data-access-auth/auth.service';
+import { FavoriteArticleService } from '../shared-data-access-favorite-article/favorite-article.service';
 import { SharedUiArticlesList } from '../shared-ui/articles-list/articles-list.component';
 import { UiHomeBanner } from '../ui-home/banner/banner.component';
 import { UiHomeFeedToggle } from '../ui-home/feed-toggle/feed-toggle.component';
 import { UiHomeTags } from '../ui-home/tags/tags.component';
+import { HomeService } from './home.service';
+import { TagsService } from './tags.service';
 
 @Component({
     standalone: true,
@@ -17,24 +17,24 @@ import { UiHomeTags } from '../ui-home/tags/tags.component';
             <div class="row">
                 <div class="col-md-9">
                     <app-ui-home-feed-toggle
-                        [selectedTag]="homeApi.selectedTag()"
-                        [isFeedDisabled]="!authApi.isAuthenticated()"
-                        [feedType]="homeApi.feedType()"
-                        (selectFeed)="homeApi.getArticles('feed')"
-                        (selectGlobal)="homeApi.getArticles('global')"
+                        [selectedTag]="homeService.vm.selectedTag()"
+                        [isFeedDisabled]="!authService.vm.isAuthenticated()"
+                        [feedType]="homeService.vm.feedType()"
+                        (selectFeed)="homeService.getArticles('feed')"
+                        (selectGlobal)="homeService.getArticles('global')"
                     />
                     <app-shared-ui-articles-list
-                        [status]="homeApi.status()"
-                        [articles]="homeApi.articles()"
-                        (toggleFavorite)="favoriteApi.toggleFavorite($event)"
+                        [status]="homeService.vm.status()"
+                        [articles]="homeService.vm.articles()"
+                        (toggleFavorite)="favoriteArticleService.toggleFavorite($event)"
                     />
                 </div>
 
                 <div class="col-md-3">
                     <app-ui-home-tags
-                        [status]="tagsApi.status()"
-                        [tags]="tagsApi.tags()"
-                        (selectTag)="homeApi.getArticles('tag', $event)"
+                        [status]="tagsService.vm.status()"
+                        [tags]="tagsService.vm.tags()"
+                        (selectTag)="homeService.getArticles('tag', $event)"
                     >
                         <p>Loading...</p>
                     </app-ui-home-tags>
@@ -43,18 +43,18 @@ import { UiHomeTags } from '../ui-home/tags/tags.component';
         </div>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [provideHomeApi(), provideTagsApi()],
+    providers: [FavoriteArticleService, HomeService, TagsService],
     host: { class: 'block home-page' },
     imports: [UiHomeBanner, UiHomeTags, UiHomeFeedToggle, SharedUiArticlesList],
 })
 export default class Home implements OnInit {
-    protected readonly homeApi = injectHomeApi();
-    protected readonly favoriteApi = injectFavoriteApi();
-    protected readonly tagsApi = injectTagsApi();
-    protected readonly authApi = injectAuthApi();
+    protected readonly homeService = inject(HomeService);
+    protected readonly favoriteArticleService = inject(FavoriteArticleService);
+    protected readonly tagsService = inject(TagsService);
+    protected readonly authService = inject(AuthService);
 
     ngOnInit() {
-        this.tagsApi.getTags();
-        this.homeApi.getArticles('global');
+        this.tagsService.getTags();
+        this.homeService.getArticles('global');
     }
 }
