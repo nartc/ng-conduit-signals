@@ -1,5 +1,5 @@
 import { Signal, isSignal } from '@angular/core';
-import { fromObservable, fromSignal } from '@angular/core/rxjs-interop';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Observable, ObservableInput, OperatorFunction, from, isObservable } from 'rxjs';
 
 function toPipeableArgs<TValue, TReturn = TValue>(
@@ -8,7 +8,7 @@ function toPipeableArgs<TValue, TReturn = TValue>(
     operator?: OperatorFunction<TValue, TReturn>
 ): [Observable<TValue>, OperatorFunction<TValue, TReturn>?, TValue?] {
     if (typeof source === 'function' && isSignal(source)) {
-        return [fromSignal(source), initialValueOrOperator as OperatorFunction<TValue, TReturn>, source() as TValue];
+        return [toObservable(source), initialValueOrOperator as OperatorFunction<TValue, TReturn>, source() as TValue];
     }
 
     if (source instanceof Promise || ('then' in source && typeof source['then'] === 'function')) {
@@ -47,8 +47,8 @@ export function computed$<TValue, TReturn = TValue>(
     const [$, op, initialValue] = toPipeableArgs(source, initialValueOrOperator, operator);
 
     if (!op) {
-        return fromObservable($, initialValue) as Signal<TReturn>;
+        return toSignal($, { initialValue }) as Signal<TReturn>;
     }
 
-    return fromObservable($.pipe(op), initialValue as TReturn) as Signal<TReturn>;
+    return toSignal($.pipe(op), { initialValue: initialValue as TReturn }) as Signal<TReturn>;
 }

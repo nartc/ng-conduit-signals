@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { fromSignal } from '@angular/core/rxjs-interop';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { CanMatchFn, Router } from '@angular/router';
 import { filter, map } from 'rxjs';
 import { AuthService } from './auth.service';
@@ -9,7 +9,7 @@ export function authGuard(type: 'protected' | 'unprotected'): CanMatchFn {
         const router = inject(Router);
         const authService = inject(AuthService);
 
-        return fromSignal(authService.isAuthenticated).pipe(
+        return toObservable(authService.isAuthenticated).pipe(
             filter(() => !authService.isAuthenticating()),
             map((isAuthenticated) => {
                 if ((type === 'unprotected' && !isAuthenticated) || (type === 'protected' && isAuthenticated))
