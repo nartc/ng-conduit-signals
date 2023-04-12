@@ -12,6 +12,11 @@ export default [
         loadComponent: () => import('../feature-settings/settings.component'),
     },
     {
+        path: 'editor',
+        canMatch: [authGuard('protected')],
+        loadChildren: () => import('../feature-editor/editor.routes'),
+    },
+    {
         path: 'article/:slug',
         canMatch: [authGuard('protected')],
         loadComponent: () => import('../feature-article/article.component'),
