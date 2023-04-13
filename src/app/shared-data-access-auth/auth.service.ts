@@ -3,6 +3,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { User, UserAndAuthenticationApiClient } from '../shared-data-access-api';
+import { injectIsServer } from '../shared-utils/is-server';
 
 export type AuthStatus = 'idle' | 'authenticated' | 'unauthenticated';
 
@@ -10,6 +11,7 @@ export type AuthStatus = 'idle' | 'authenticated' | 'unauthenticated';
 export class AuthService {
     readonly #userAndAuthenticationApiClient = inject(UserAndAuthenticationApiClient);
     readonly #router = inject(Router);
+    readonly #isServer = injectIsServer();
 
     readonly #user = signal<User | null>(null);
     readonly #status = signal<AuthStatus>('idle');
@@ -20,6 +22,8 @@ export class AuthService {
     readonly username = () => this.#user()?.username || '';
 
     async refresh() {
+        if (this.#isServer) return;
+    
         const token = localStorage.getItem('ng-conduit-signals-token');
         if (!token) {
             this.#user.set(null);
