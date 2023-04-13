@@ -10,9 +10,9 @@
             "prefix": "app",
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-angular:browser-esbuild",
+                    "builder": "@angular-devkit/build-angular:browser",
                     "options": {
-                        "outputPath": "dist/ng-conduit-signals",
+                        "outputPath": "dist/ng-conduit-signals/browser",
                         "index": "src/index.html",
                         "main": "src/main.ts",
                         "polyfills": ["zone.js"],
@@ -66,6 +66,59 @@
                     "options": {
                         "browserTarget": "ng-conduit-signals:build"
                     }
+                },
+                "server": {
+                  "builder": "@angular-devkit/build-angular:server",
+                  "options": {
+                    "outputPath": "dist/ng-conduit-signals/server",
+                    "main": "server.ts",
+                    "tsConfig": "tsconfig.server.json"
+                  },
+                  "configurations": {
+                    "production": {
+                      "outputHashing": "media"
+                    },
+                    "development": {
+                      "optimization": false,
+                      "sourceMap": true,
+                      "extractLicenses": false,
+                      "vendorChunk": true
+                    }
+                  },
+                  "defaultConfiguration": "production"
+                },
+                "serve-ssr": {
+                  "builder": "@nguniversal/builders:ssr-dev-server",
+                  "configurations": {
+                    "development": {
+                      "browserTarget": "ng-conduit-signals:build:development",
+                      "serverTarget": "ng-conduit-signals:server:development"
+                    },
+                    "production": {
+                      "browserTarget": "ng-conduit-signals:build:production",
+                      "serverTarget": "ng-conduit-signals:server:production"
+                    }
+                  },
+                  "defaultConfiguration": "development"
+                },
+                "prerender": {
+                  "builder": "@nguniversal/builders:prerender",
+                  "options": {
+                    "routes": [
+                      "/"
+                    ]
+                  },
+                  "configurations": {
+                    "production": {
+                      "browserTarget": "ng-conduit-signals:build:production",
+                      "serverTarget": "ng-conduit-signals:server:production"
+                    },
+                    "development": {
+                      "browserTarget": "ng-conduit-signals:build:development",
+                      "serverTarget": "ng-conduit-signals:server:development"
+                    }
+                  },
+                  "defaultConfiguration": "production"
                 }
             }
         }

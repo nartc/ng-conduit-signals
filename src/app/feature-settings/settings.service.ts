@@ -4,11 +4,13 @@ import { lastValueFrom } from 'rxjs';
 import { UpdateUser, UserAndAuthenticationApiClient } from '../shared-data-access-api';
 import { AuthService } from '../shared-data-access-auth/auth.service';
 import { ApiStatus } from '../shared-data-access-models/api-status';
+import { injectIsServer } from '../shared-utils/is-server';
 
 @Injectable()
 export class SettingsService {
     readonly #userAndAuthenticationApiClient = inject(UserAndAuthenticationApiClient);
     readonly #authService = inject(AuthService);
+    readonly #isServer = injectIsServer();
 
     readonly #status = signal<ApiStatus>('idle');
 
@@ -29,8 +31,10 @@ export class SettingsService {
     }
 
     logout() {
-        localStorage.removeItem('ng-conduit-signals-token');
-        localStorage.removeItem('ng-conduit-signals-user');
+        if (!this.#isServer) {
+            localStorage.removeItem('ng-conduit-signals-token');
+            localStorage.removeItem('ng-conduit-signals-user');
+        }
         this.#authService.authenticate();
     }
 }

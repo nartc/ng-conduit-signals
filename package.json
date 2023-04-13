@@ -1,41 +1,51 @@
 {
-    "name": "ng-conduit-signals",
-    "version": "0.0.0",
-    "scripts": {
-        "start": "ng serve",
-        "build": "ng build",
-        "openapi": "ng-openapi-gen"
-    },
-    "private": true,
-    "dependencies": {
-        "@angular/animations": "^16.0.0-rc.0",
-        "@angular/common": "^16.0.0-rc.0",
-        "@angular/compiler": "^16.0.0-rc.0",
-        "@angular/core": "^16.0.0-rc.0",
-        "@angular/forms": "^16.0.0-rc.0",
-        "@angular/platform-browser": "^16.0.0-rc.0",
-        "@angular/platform-browser-dynamic": "^16.0.0-rc.0",
-        "@angular/router": "^16.0.0-rc.0",
-        "marked": "^4.3.0",
-        "rxjs": "^7.8.0",
-        "tslib": "^2.5.0",
-        "zone.js": "^0.13.0"
-    },
-    "devDependencies": {
-        "@angular-devkit/build-angular": "^16.0.0-rc.0",
-        "@angular/cli": "^16.0.0-rc.0",
-        "@angular/compiler-cli": "^16.0.0-rc.0",
-        "@types/marked": "^4.0.8",
-        "ng-openapi-gen": "^0.24.1",
-        "prettier": "^2.8.7",
-        "prettier-plugin-organize-imports": "^3.2.2",
-        "typescript": "^5.0.4"
-    },
-    "prettier": {
-        "semi": true,
-        "singleQuote": true,
-        "tabWidth": 4,
-        "printWidth": 120,
-        "htmlWhitespaceSensitivity": "ignore"
-    }
+  "name": "ng-conduit-signals",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "ng serve",
+    "build": "ng build",
+    "openapi": "ng-openapi-gen",
+    "dev:ssr": "ng run ng-conduit-signals:serve-ssr",
+    "serve:ssr": "node dist/ng-conduit-signals/server/main.js",
+    "build:ssr": "ng build && ng run ng-conduit-signals:server",
+    "prerender": "ng run ng-conduit-signals:prerender"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^16.0.0-rc.0",
+    "@angular/common": "^16.0.0-rc.0",
+    "@angular/compiler": "^16.0.0-rc.0",
+    "@angular/core": "^16.0.0-rc.0",
+    "@angular/forms": "^16.0.0-rc.0",
+    "@angular/platform-browser": "^16.0.0-rc.0",
+    "@angular/platform-browser-dynamic": "^16.0.0-rc.0",
+    "@angular/platform-server": "^16.0.0-rc.0",
+    "@angular/router": "^16.0.0-rc.0",
+    "@nguniversal/express-engine": "^16.0.0-next.0",
+    "express": "^4.15.2",
+    "marked": "^4.3.0",
+    "rxjs": "^7.8.0",
+    "tslib": "^2.5.0",
+    "zone.js": "^0.13.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^16.0.0-rc.0",
+    "@angular/cli": "^16.0.0-rc.0",
+    "@angular/compiler-cli": "^16.0.0-rc.0",
+    "@nguniversal/builders": "^16.0.0-next.0",
+    "@types/express": "^4.17.0",
+    "@types/marked": "^4.0.8",
+    "@types/node": "^14.15.0",
+    "ng-openapi-gen": "^0.24.1",
+    "prettier": "^2.8.7",
+    "prettier-plugin-organize-imports": "^3.2.2",
+    "typescript": "^5.0.4"
+  },
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 4,
+    "printWidth": 120,
+    "htmlWhitespaceSensitivity": "ignore"
+  }
 }
