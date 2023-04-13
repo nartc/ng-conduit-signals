@@ -2,7 +2,7 @@
 
 > ### Angular 16@next with Signals codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld) spec and API.
 
-### [Demo](https://stackblitz.com/github/nartc/ng-conduit-signals?preset=node/)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
+### [Demo](https://ng-conduit-signals.onrender.com/)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)&nbsp;&nbsp;&nbsp;&nbsp;[Stackblitz](https://stackblitz.com/github/nartc/ng-conduit-signals?preset=node/)
 
 This codebase was created to demonstrate a fully fledged Front-end application built with **Angular 16@next w/ Signals** including CRUD operations, authentication, routing, pagination, and more.
 
@@ -57,6 +57,11 @@ effect(() => {
 -   Without RxJS, we do forgo some forms of Race Condition handling as well as Cancellation. I'd assume the ecosystem like NgRx, RxAngular, NgXS are going to come up with
     some abstractions for this. The point is on the consumers' code, we don't need to think about RxJS vs Signals. It depends on the public APIs of these ecosystems.
 -   `authGuard` still uses RxJS because I need the Guard to **wait** for the `AuthService`to have a chance to determine the initial authentication status.
+
+# Current TODOs
+
+-   There are couple places where we need to call `cdr.markForCheck()`. I'm not entirely sure why
+-   Toggle Favorite on screens with Article List doesn't seem to update the UI regardless of what I try.
 
 # Getting started
 
