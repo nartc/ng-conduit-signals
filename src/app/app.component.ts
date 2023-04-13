@@ -8,11 +8,7 @@ import { AuthService } from './shared-data-access-auth/auth.service';
     standalone: true,
     imports: [RouterOutlet, NgIf],
     template: `
-        <ng-container 
-            *ngIf="authService.isAuthenticating()">
-            Loading...
-        </ng-container>
-        
+        <ng-container *ngIf="authService.isAuthenticating()">Loading...</ng-container>
         <router-outlet />
     `,
 })
