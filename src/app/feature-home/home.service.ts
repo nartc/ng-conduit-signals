@@ -16,11 +16,11 @@ export class HomeService {
     readonly #selectedTag = signal('');
     readonly #articles = signal<Article[]>([]);
 
-    readonly articles = () => this.#articles();
-    readonly status = () => this.#status();
+    readonly articles = this.#articles.asReadonly();
+    readonly status = this.#status.asReadonly();
+    readonly feedType = this.#feedType.asReadonly();
+    readonly selectedTag = this.#selectedTag.asReadonly();
     readonly toggleFavoriteStatus = this.#favoriteArticleService.status;
-    readonly feedType = () => this.#feedType();
-    readonly selectedTag = () => this.#selectedTag();
 
     getArticles(type: FeedType, tag?: string) {
         this.#status.set('loading');

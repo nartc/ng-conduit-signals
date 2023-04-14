@@ -10,7 +10,7 @@ export class FollowAuthorService {
 
     readonly #status = signal<ApiStatus>('idle');
 
-    readonly status = () => this.#status();
+    readonly status = this.#status.asReadonly();
 
     toggleFollow(profile: Profile) {
         this.#status.set('loading');

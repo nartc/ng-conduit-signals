@@ -9,7 +9,7 @@ export class FavoriteArticleService {
     readonly #favoritesApiClient = inject(FavoritesApiClient);
     readonly #status = signal<ApiStatus>('idle');
 
-    readonly status = () => this.#status();
+    readonly status = this.#status.asReadonly();
 
     toggleFavorite(article: Article) {
         this.#status.set('loading');

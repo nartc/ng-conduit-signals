@@ -16,7 +16,7 @@ export class ProfileService {
     readonly #status = signal<ApiStatus>('idle');
     readonly #profile = signal<Profile | null>(null);
 
-    readonly profile = () => this.#profile();
+    readonly profile = this.#profile.asReadonly();
     readonly isLoading = computed(() => this.#status() === 'loading');
     readonly isOwner = computed(() => {
         const currentUser = this.#authService.user();

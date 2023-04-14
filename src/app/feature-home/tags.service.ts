@@ -11,8 +11,8 @@ export class TagsService {
     readonly #status = signal<ApiStatus>('idle');
     readonly #tags = signal<string[]>([]);
 
-    readonly tags = () => this.#tags();
-    readonly status = () => this.#status();
+    readonly tags = this.#tags.asReadonly();
+    readonly status = this.#status.asReadonly();
 
     getTags() {
         this.#status.set('loading');

@@ -18,12 +18,12 @@ export class AuthService {
 
     readonly isAuthenticated = computed(() => this.#status() === 'authenticated');
     readonly isAuthenticating = computed(() => this.#status() === 'idle');
-    readonly user = () => this.#user();
-    readonly username = () => this.#user()?.username || '';
+    readonly user = this.#user.asReadonly();
+    readonly username = computed(() => this.#user()?.username || '');
 
     async refresh() {
         if (this.#isServer) return;
-    
+
         const token = localStorage.getItem('ng-conduit-signals-token');
         if (!token) {
             this.#user.set(null);

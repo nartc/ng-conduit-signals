@@ -14,7 +14,7 @@ export class EditArticleService {
     readonly #article = signal<Article | null>(null);
 
     readonly isLoading = computed(() => this.#status() === 'loading');
-    readonly article = () => this.#article();
+    readonly article = this.#article.asReadonly();
 
     getArticle(slug: string) {
         this.#status.set('loading');
