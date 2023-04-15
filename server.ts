@@ -5,6 +5,7 @@ import * as express from 'express';
 import { ISRHandler } from 'ngx-isr';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { RedisCacheHandler } from './redis-cache-handler';
 import bootstrap from './src/main.server';
 
 // The Express app is exported so that it can be used by serverless Functions.
@@ -13,9 +14,17 @@ export function app(): express.Express {
     const distFolder = join(process.cwd(), 'dist/ng-conduit-signals/browser');
     const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
 
+    const REDIS_CONNECTION_STRING = process.env['REDIS_CONNECTION_STRING'] || '';
+    const INVALIDATE_TOKEN = process.env['INVALIDATE_TOKEN'] || '';
+
+    const redisCacheHandler = REDIS_CONNECTION_STRING
+        ? new RedisCacheHandler({ connectionString: REDIS_CONNECTION_STRING })
+        : undefined;
+
     const isr = new ISRHandler({
         indexHtml,
-        invalidateSecretToken: process.env['INVALIDATE_TOKEN'] || 'TOKEN',
+        cache: redisCacheHandler,
+        invalidateSecretToken: INVALIDATE_TOKEN || 'MY_TOKEN',
         enableLogging: true,
     });
 
