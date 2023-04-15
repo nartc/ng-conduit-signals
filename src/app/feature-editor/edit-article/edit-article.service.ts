@@ -1,7 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { lastValueFrom } from 'rxjs';
 import { Article, ArticlesApiClient, UpdateArticle } from '../../shared-data-access-api';
 import { ApiStatus } from '../../shared-data-access-models/api-status';
 
@@ -14,11 +13,12 @@ export class EditArticleService {
     readonly #article = signal<Article | null>(null);
 
     readonly isLoading = computed(() => this.#status() === 'loading');
-    readonly article = () => this.#article();
+    readonly article = this.#article.asReadonly();
 
     getArticle(slug: string) {
         this.#status.set('loading');
-        lastValueFrom(this.#articlesApiClient.getArticle({ slug }))
+        this.#articlesApiClient
+            .getArticle({ slug })
             .then((response) => {
                 this.#status.set('success');
                 this.#article.set(response.article);
@@ -32,9 +32,8 @@ export class EditArticleService {
     updateArticle(articleToUpdate: UpdateArticle) {
         const article = this.#article();
         if (article) {
-            lastValueFrom(
-                this.#articlesApiClient.updateArticle({ slug: article.slug, body: { article: articleToUpdate } })
-            )
+            this.#articlesApiClient
+                .updateArticle({ slug: article.slug, body: { article: articleToUpdate } })
                 .then((response) => {
                     void this.#router.navigate(['/article', response.article.slug]);
                 })

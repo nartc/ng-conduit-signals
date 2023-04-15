@@ -3,7 +3,6 @@ import { ChangeDetectorRef, Injectable, SecurityContext, computed, inject, signa
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { marked } from 'marked';
-import { lastValueFrom } from 'rxjs';
 import { Article, ArticlesApiClient, Comment, CommentsApiClient, Profile } from '../shared-data-access-api';
 import { AuthService } from '../shared-data-access-auth/auth.service';
 import { FavoriteArticleService } from '../shared-data-access-favorite-article/favorite-article.service';
@@ -57,8 +56,8 @@ export class ArticleService {
     getArticle(slug: string) {
         this.#status.set('loading');
         Promise.all([
-            lastValueFrom(this.#articlesApiClient.getArticle({ slug })),
-            lastValueFrom(this.#commentsApiClient.getArticleComments({ slug })),
+            this.#articlesApiClient.getArticle({ slug }),
+            this.#commentsApiClient.getArticleComments({ slug }),
         ])
             .then(([articleResponse, commentsResponse]) => {
                 this.#status.set('success');
@@ -84,7 +83,8 @@ export class ArticleService {
     }
 
     deleteArticle(slug: string) {
-        lastValueFrom(this.#articlesApiClient.deleteArticle({ slug }))
+        this.#articlesApiClient
+            .deleteArticle({ slug })
             .then(() => {
                 void this.#router.navigate(['/']);
             })
@@ -109,12 +109,11 @@ export class ArticleService {
     createComment(comment: string) {
         const article = this.#article();
         if (article) {
-            lastValueFrom(
-                this.#commentsApiClient.createArticleComment({
+            this.#commentsApiClient
+                .createArticleComment({
                     body: { comment: { body: comment } },
                     slug: article.slug,
                 })
-            )
                 .then((response) => {
                     this.#comments.update((comments) => [...comments, response.comment]);
                 })
@@ -127,7 +126,8 @@ export class ArticleService {
     deleteComment(id: number) {
         const article = this.#article();
         if (article) {
-            lastValueFrom(this.#commentsApiClient.deleteArticleComment({ id, slug: article.slug }))
+            this.#commentsApiClient
+                .deleteArticleComment({ id, slug: article.slug })
                 .then(() => {
                     this.#comments.update((comments) => comments.filter((comment) => comment.id !== id));
                 })

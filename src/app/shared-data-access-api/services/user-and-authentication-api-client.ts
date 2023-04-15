@@ -6,8 +6,7 @@ import { BaseApiClient } from '../base-api-client';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 import { RequestBuilder } from '../request-builder';
-import { Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { Observable, lastValueFrom, map, filter } from 'rxjs';
 
 import { LoginUser } from '../models/login-user';
 import { NewUser } from '../models/new-user';
@@ -95,16 +94,18 @@ export class UserAndAuthenticationApiClient extends BaseApiClient {
   },
   context?: HttpContext
 
-): Observable<{
+): Promise<{
 'user': User;
 }> {
 
-    return this.login$Response(params,context).pipe(
-      map((r: StrictHttpResponse<{
+    return lastValueFrom(
+        this.login$Response(params,context).pipe(
+            map((r: StrictHttpResponse<{
 'user': User;
 }>) => r.body as {
 'user': User;
 })
+        )
     );
   }
 
@@ -174,16 +175,18 @@ export class UserAndAuthenticationApiClient extends BaseApiClient {
   },
   context?: HttpContext
 
-): Observable<{
+): Promise<{
 'user': User;
 }> {
 
-    return this.createUser$Response(params,context).pipe(
-      map((r: StrictHttpResponse<{
+    return lastValueFrom(
+        this.createUser$Response(params,context).pipe(
+            map((r: StrictHttpResponse<{
 'user': User;
 }>) => r.body as {
 'user': User;
 })
+        )
     );
   }
 
@@ -242,16 +245,18 @@ export class UserAndAuthenticationApiClient extends BaseApiClient {
   },
   context?: HttpContext
 
-): Observable<{
+): Promise<{
 'user': User;
 }> {
 
-    return this.getCurrentUser$Response(params,context).pipe(
-      map((r: StrictHttpResponse<{
+    return lastValueFrom(
+        this.getCurrentUser$Response(params,context).pipe(
+            map((r: StrictHttpResponse<{
 'user': User;
 }>) => r.body as {
 'user': User;
 })
+        )
     );
   }
 
@@ -325,16 +330,18 @@ export class UserAndAuthenticationApiClient extends BaseApiClient {
   },
   context?: HttpContext
 
-): Observable<{
+): Promise<{
 'user': User;
 }> {
 
-    return this.updateCurrentUser$Response(params,context).pipe(
-      map((r: StrictHttpResponse<{
+    return lastValueFrom(
+        this.updateCurrentUser$Response(params,context).pipe(
+            map((r: StrictHttpResponse<{
 'user': User;
 }>) => r.body as {
 'user': User;
 })
+        )
     );
   }
 

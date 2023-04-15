@@ -1,0 +1,8 @@
+{{{bodyMethodTsComments}}}{{methodName}}({{>operationParameters}}): Promise<{{{resultType}}}> {
+
+    return lastValueFrom(
+        this.{{responseMethodName}}(params,context).pipe(
+            map((r: {{@root.responseClass}}<{{{resultType}}}>) => r.body as {{{resultType}}})
+        )
+    );
+  }

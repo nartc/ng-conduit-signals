@@ -1,4 +1,4 @@
-import { DatePipe, NgFor, NgIf } from '@angular/common';
+import { CommonModule, DatePipe, NgFor, NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Article } from '../../shared-data-access-api';
@@ -21,7 +21,8 @@ import { Article } from '../../shared-data-access-api';
                 </div>
                 <button
                     class="btn btn-sm pull-xs-right"
-                    [class]="[article.favorited ? 'btn-primary' : 'btn-outline-primary']"
+                    [class.btn-primary]="article.favorited"
+                    [class.btn-outline-primary]="!article.favorited"
                     (click)="toggleFavorite.emit(article)"
                 >
                     <i class="ion-heart"></i>
@@ -45,7 +46,7 @@ import { Article } from '../../shared-data-access-api';
     `,
     standalone: true,
     host: { class: 'block article-preview' },
-    imports: [NgIf, NgFor, DatePipe, RouterLink],
+    imports: [NgIf, NgFor, DatePipe, RouterLink, CommonModule],
 })
 export class SharedUiArticlePreview {
     @Input() article?: Article;

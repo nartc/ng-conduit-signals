@@ -2,7 +2,7 @@
 
 > ### Angular 16@next with Signals codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld) spec and API.
 
-### [Demo](https://stackblitz.com/github/nartc/ng-conduit-signals?preset=node/)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
+### [Demo](https://ng-conduit-signals.vercel.app/)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)&nbsp;&nbsp;&nbsp;&nbsp;[Stackblitz](https://stackblitz.com/github/nartc/ng-conduit-signals?preset=node/)
 
 This codebase was created to demonstrate a fully fledged Front-end application built with **Angular 16@next w/ Signals** including CRUD operations, authentication, routing, pagination, and more.
 
@@ -22,7 +22,6 @@ open invitation for you to tweak where you think RxJS makes more sense.
 
 > Describe the general architecture of your app here
 
--   API Clients are generated via `ng-openapi-generator` and they stay as Observables and are invoked with `lastValueFrom` to convert to Promise
 -   `withComponentInputBinding` is also utilized for binding Route data to Routed Components' Inputs (check `feature-article`)
 -   API calls happen based on User Events/Actions (click something, submit somthing, navigate into a component etc...) rather than Observable Stream
 -   `status` (`ApiStatus`) signal is a bit of a pain-point and should be abstracted better. Usually when we work with API calls and RxJS, we'd usually have
@@ -58,7 +57,12 @@ effect(() => {
     some abstractions for this. The point is on the consumers' code, we don't need to think about RxJS vs Signals. It depends on the public APIs of these ecosystems.
 -   `authGuard` still uses RxJS because I need the Guard to **wait** for the `AuthService`to have a chance to determine the initial authentication status.
 
+# Current TODOs
+
+-   There are couple places where we need to call `cdr.markForCheck()`. Specifically, those place are invoked via **Input Setter**.
+
 # Getting started
 
 -   `npm install`
 -   `npm run serve`
+-   To serve SSR, `npm run dev:ssr`

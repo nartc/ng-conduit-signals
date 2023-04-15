@@ -26,7 +26,7 @@ import { TagsService } from './tags.service';
                     <app-shared-ui-articles-list
                         [status]="homeService.status()"
                         [articles]="homeService.articles()"
-                        (toggleFavorite)="favoriteArticleService.toggleFavorite($event)"
+                        (toggleFavorite)="homeService.toggleFavorite($event)"
                     />
                 </div>
 
@@ -49,7 +49,6 @@ import { TagsService } from './tags.service';
 })
 export default class Home implements OnInit {
     protected readonly homeService = inject(HomeService);
-    protected readonly favoriteArticleService = inject(FavoriteArticleService);
     protected readonly tagsService = inject(TagsService);
     protected readonly authService = inject(AuthService);
 

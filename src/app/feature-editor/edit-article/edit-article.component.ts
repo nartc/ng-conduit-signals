@@ -8,7 +8,7 @@ import { EditArticleService } from './edit-article.service';
     template: `
         <app-shared-ui-form-layout class="editor-page" innerClass="col-md-10 offset-md-1 col-xs-12">
             <app-shared-ui-article-form
-                *ngIf="article"
+                *ngIf="editArticleService.article() as article"
                 [article]="article"
                 (articleSubmit)="editArticleService.updateArticle($event)"
             />
@@ -24,9 +24,5 @@ export default class EditArticle {
 
     @RouteInput() set slug(slug: string) {
         this.editArticleService.getArticle(slug);
-    }
-
-    get article() {
-        return this.editArticleService.article()!;
     }
 }
