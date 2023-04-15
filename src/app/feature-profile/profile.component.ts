@@ -1,5 +1,6 @@
 import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input as RouteInput, inject } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { RouterOutlet } from '@angular/router';
 import { FollowAuthorService } from '../shared-data-access-follow-author/follow-author.service';
 import { UiProfileArticlesToggle } from '../ui-profile/articles-toggle/articles-toggle.component';
@@ -37,8 +38,10 @@ import { ProfileService } from './profile.service';
 })
 export default class Profile {
     protected readonly profileService = inject(ProfileService);
+    protected readonly titleService = inject(Title);
 
     @RouteInput() set username(username: string) {
         this.profileService.getProfile(username);
+        this.titleService.setTitle(username + ' Author Profile');
     }
 }

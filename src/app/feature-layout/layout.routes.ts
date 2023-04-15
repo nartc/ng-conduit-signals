@@ -6,11 +6,13 @@ export default [
         path: '',
         loadComponent: () => import('../feature-home/home.component'),
         data: { revalidate: 60 },
+        title: 'Home',
     },
     {
         path: 'settings',
         canMatch: [authGuard('protected')],
         loadComponent: () => import('../feature-settings/settings.component'),
+        title: 'Settings',
     },
     {
         path: 'editor',
@@ -33,11 +35,13 @@ export default [
         canMatch: [authGuard('unprotected')],
         loadComponent: () => import('../feature-register/register.component'),
         data: { revalidate: 60 },
+        title: 'Sign up',
     },
     {
         path: 'login',
         canMatch: [authGuard('unprotected')],
         loadComponent: () => import('../feature-login/login.component'),
         data: { revalidate: 60 },
+        title: 'Sign in',
     },
 ] as Routes;
