@@ -1,0 +1,11 @@
+{
+    "version": 2,
+    "public": true,
+    "name": "ng-conduit-signals",
+    "rewrites": [{ "source": "/(.*)", "destination": "/api" }],
+    "functions": {
+        "api/index.js": {
+            "includeFiles": "dist/ng-conduit-signals/browser/**"
+        }
+    }
+}
