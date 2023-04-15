@@ -1,10 +1,11 @@
 import 'zone.js/node';
 
-import { APP_BASE_HREF } from '@angular/common';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import * as express from 'express';
+import { ISRHandler } from 'ngx-isr';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { RedisCacheHandler } from './redis-cache-handler';
 import bootstrap from './src/main.server';
 
 // The Express app is exported so that it can be used by serverless Functions.
@@ -12,6 +13,20 @@ export function app(): express.Express {
     const server = express();
     const distFolder = join(process.cwd(), 'dist/ng-conduit-signals/browser');
     const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
+
+    const REDIS_CONNECTION_STRING = process.env['REDIS_CONNECTION_STRING'] || '';
+    const INVALIDATE_TOKEN = process.env['INVALIDATE_TOKEN'] || '';
+
+    const redisCacheHandler = REDIS_CONNECTION_STRING
+        ? new RedisCacheHandler({ connectionString: REDIS_CONNECTION_STRING })
+        : undefined;
+
+    const isr = new ISRHandler({
+        indexHtml,
+        cache: redisCacheHandler,
+        invalidateSecretToken: INVALIDATE_TOKEN || 'MY_TOKEN',
+        enableLogging: true,
+    });
 
     // Our Universal express-engine (found @ https://github.com/angular/universal/tree/main/modules/express-engine)
     server.engine(
@@ -34,11 +49,11 @@ export function app(): express.Express {
         })
     );
 
-    // All regular routes use the Universal engine
-    server.get('*', (req, res) => {
-        console.log(`Request for ${req.url}`);
-        res.render(indexHtml, { req, providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }] });
-    });
+    server.get(
+        '*',
+        async (req, res, next) => await isr.serveFromCache(req, res, next),
+        async (req, res, next) => await isr.render(req, res, next)
+    );
 
     return server;
 }
