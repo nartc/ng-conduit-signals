@@ -6,8 +6,7 @@ import { BaseApiClient } from '../base-api-client';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 import { RequestBuilder } from '../request-builder';
-import { Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { Observable, lastValueFrom, map, filter } from 'rxjs';
 
 import { Article } from '../models/article';
 
@@ -88,16 +87,18 @@ export class FavoritesApiClient extends BaseApiClient {
   },
   context?: HttpContext
 
-): Observable<{
+): Promise<{
 'article': Article;
 }> {
 
-    return this.createArticleFavorite$Response(params,context).pipe(
-      map((r: StrictHttpResponse<{
+    return lastValueFrom(
+        this.createArticleFavorite$Response(params,context).pipe(
+            map((r: StrictHttpResponse<{
 'article': Article;
 }>) => r.body as {
 'article': Article;
 })
+        )
     );
   }
 
@@ -167,16 +168,18 @@ export class FavoritesApiClient extends BaseApiClient {
   },
   context?: HttpContext
 
-): Observable<{
+): Promise<{
 'article': Article;
 }> {
 
-    return this.deleteArticleFavorite$Response(params,context).pipe(
-      map((r: StrictHttpResponse<{
+    return lastValueFrom(
+        this.deleteArticleFavorite$Response(params,context).pipe(
+            map((r: StrictHttpResponse<{
 'article': Article;
 }>) => r.body as {
 'article': Article;
 })
+        )
     );
   }
 

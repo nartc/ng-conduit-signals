@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { lastValueFrom } from 'rxjs';
 import { ProfileService } from '../feature-profile/profile.service';
 import { Article, ArticlesApiClient } from '../shared-data-access-api';
 import { FavoriteArticleService } from '../shared-data-access-favorite-article/favorite-article.service';
@@ -25,10 +24,9 @@ export class ProfileArticlesService {
         const profile = this.#profileService.profile();
         if (profile) {
             this.#status.set('loading');
-            lastValueFrom(
-                this.#articlesType === 'favorites'
-                    ? this.#articlesApiClient.getArticles({ favorited: profile.username })
-                    : this.#articlesApiClient.getArticles({ author: profile.username })
+            (this.#articlesType === 'favorites'
+                ? this.#articlesApiClient.getArticles({ favorited: profile.username })
+                : this.#articlesApiClient.getArticles({ author: profile.username })
             )
                 .then((response) => {
                     this.#status.set('success');

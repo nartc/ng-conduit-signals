@@ -22,7 +22,6 @@ open invitation for you to tweak where you think RxJS makes more sense.
 
 > Describe the general architecture of your app here
 
--   API Clients are generated via `ng-openapi-generator` and they stay as Observables and are invoked with `lastValueFrom` to convert to Promise
 -   `withComponentInputBinding` is also utilized for binding Route data to Routed Components' Inputs (check `feature-article`)
 -   API calls happen based on User Events/Actions (click something, submit somthing, navigate into a component etc...) rather than Observable Stream
 -   `status` (`ApiStatus`) signal is a bit of a pain-point and should be abstracted better. Usually when we work with API calls and RxJS, we'd usually have
@@ -60,10 +59,10 @@ effect(() => {
 
 # Current TODOs
 
--   There are couple places where we need to call `cdr.markForCheck()`. I'm not entirely sure why
--   Toggle Favorite on screens with Article List doesn't seem to update the UI regardless of what I try.
+-   There are couple places where we need to call `cdr.markForCheck()`. Specifically, those place are invoked via **Input Setter**.
 
 # Getting started
 
 -   `npm install`
 -   `npm run serve`
+-   To serve SSR, `npm run dev:ssr`

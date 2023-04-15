@@ -6,8 +6,7 @@ import { BaseApiClient } from '../base-api-client';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 import { RequestBuilder } from '../request-builder';
-import { Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { Observable, lastValueFrom, map, filter } from 'rxjs';
 
 
 @Injectable({
@@ -76,16 +75,18 @@ export class TagsApiClient extends BaseApiClient {
   },
   context?: HttpContext
 
-): Observable<{
+): Promise<{
 'tags': Array<string>;
 }> {
 
-    return this.getTags$Response(params,context).pipe(
-      map((r: StrictHttpResponse<{
+    return lastValueFrom(
+        this.getTags$Response(params,context).pipe(
+            map((r: StrictHttpResponse<{
 'tags': Array<string>;
 }>) => r.body as {
 'tags': Array<string>;
 })
+        )
     );
   }
 

@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { lastValueFrom } from 'rxjs';
 import { LoginUser, UserAndAuthenticationApiClient } from '../shared-data-access-api';
 import { AuthService } from '../shared-data-access-auth/auth.service';
 import { FormErrorsService } from '../shared-data-access-form-errors/form-errors.service';
@@ -19,7 +18,8 @@ export class LoginService {
 
     login(data: LoginUser) {
         this.#status.set('loading');
-        lastValueFrom(this.#userAndAuthenticationApiClient.login({ body: { user: data } }))
+        this.#userAndAuthenticationApiClient
+            .login({ body: { user: data } })
             .then((response) => {
                 this.#status.set('success');
                 localStorage.setItem('ng-conduit-signals-token', response.user.token);

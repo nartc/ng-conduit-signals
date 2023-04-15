@@ -6,8 +6,7 @@ import { BaseApiClient } from '../base-api-client';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 import { RequestBuilder } from '../request-builder';
-import { Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { Observable, lastValueFrom, map, filter } from 'rxjs';
 
 import { Comment } from '../models/comment';
 import { NewComment } from '../models/new-comment';
@@ -89,16 +88,18 @@ export class CommentsApiClient extends BaseApiClient {
   },
   context?: HttpContext
 
-): Observable<{
+): Promise<{
 'comments': Array<Comment>;
 }> {
 
-    return this.getArticleComments$Response(params,context).pipe(
-      map((r: StrictHttpResponse<{
+    return lastValueFrom(
+        this.getArticleComments$Response(params,context).pipe(
+            map((r: StrictHttpResponse<{
 'comments': Array<Comment>;
 }>) => r.body as {
 'comments': Array<Comment>;
 })
+        )
     );
   }
 
@@ -183,16 +184,18 @@ export class CommentsApiClient extends BaseApiClient {
   },
   context?: HttpContext
 
-): Observable<{
+): Promise<{
 'comment': Comment;
 }> {
 
-    return this.createArticleComment$Response(params,context).pipe(
-      map((r: StrictHttpResponse<{
+    return lastValueFrom(
+        this.createArticleComment$Response(params,context).pipe(
+            map((r: StrictHttpResponse<{
 'comment': Comment;
 }>) => r.body as {
 'comment': Comment;
 })
+        )
     );
   }
 
@@ -269,10 +272,12 @@ export class CommentsApiClient extends BaseApiClient {
   },
   context?: HttpContext
 
-): Observable<void> {
+): Promise<void> {
 
-    return this.deleteArticleComment$Response(params,context).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+    return lastValueFrom(
+        this.deleteArticleComment$Response(params,context).pipe(
+            map((r: StrictHttpResponse<void>) => r.body as void)
+        )
     );
   }
 

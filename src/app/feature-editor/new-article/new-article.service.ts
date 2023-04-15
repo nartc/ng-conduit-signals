@@ -1,7 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { lastValueFrom } from 'rxjs';
 import { AuthService } from 'src/app/shared-data-access-auth/auth.service';
 import { ArticlesApiClient, NewArticle } from '../../shared-data-access-api';
 
@@ -14,7 +13,8 @@ export class NewArticleService {
     createArticle(newArticle: NewArticle) {
         const currentUser = this.#authService.user();
         if (currentUser) {
-            lastValueFrom(this.#articlesClient.createArticle({ body: { article: newArticle } }))
+            this.#articlesClient
+                .createArticle({ body: { article: newArticle } })
                 .then((response) => {
                     if (response) {
                         this.#router.navigate(['/article', response.article.slug]);

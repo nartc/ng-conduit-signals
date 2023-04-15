@@ -6,8 +6,7 @@ import { BaseApiClient } from '../base-api-client';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 import { RequestBuilder } from '../request-builder';
-import { Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { Observable, lastValueFrom, map, filter } from 'rxjs';
 
 import { Article } from '../models/article';
 import { NewArticle } from '../models/new-article';
@@ -103,19 +102,21 @@ export class ArticlesApiClient extends BaseApiClient {
   },
   context?: HttpContext
 
-): Observable<{
+): Promise<{
 'articles': Array<Article>;
 'articlesCount': number;
 }> {
 
-    return this.getArticlesFeed$Response(params,context).pipe(
-      map((r: StrictHttpResponse<{
+    return lastValueFrom(
+        this.getArticlesFeed$Response(params,context).pipe(
+            map((r: StrictHttpResponse<{
 'articles': Array<Article>;
 'articlesCount': number;
 }>) => r.body as {
 'articles': Array<Article>;
 'articlesCount': number;
 })
+        )
     );
   }
 
@@ -231,19 +232,21 @@ export class ArticlesApiClient extends BaseApiClient {
   },
   context?: HttpContext
 
-): Observable<{
+): Promise<{
 'articles': Array<Article>;
 'articlesCount': number;
 }> {
 
-    return this.getArticles$Response(params,context).pipe(
-      map((r: StrictHttpResponse<{
+    return lastValueFrom(
+        this.getArticles$Response(params,context).pipe(
+            map((r: StrictHttpResponse<{
 'articles': Array<Article>;
 'articlesCount': number;
 }>) => r.body as {
 'articles': Array<Article>;
 'articlesCount': number;
 })
+        )
     );
   }
 
@@ -317,16 +320,18 @@ export class ArticlesApiClient extends BaseApiClient {
   },
   context?: HttpContext
 
-): Observable<{
+): Promise<{
 'article': Article;
 }> {
 
-    return this.createArticle$Response(params,context).pipe(
-      map((r: StrictHttpResponse<{
+    return lastValueFrom(
+        this.createArticle$Response(params,context).pipe(
+            map((r: StrictHttpResponse<{
 'article': Article;
 }>) => r.body as {
 'article': Article;
 })
+        )
     );
   }
 
@@ -396,16 +401,18 @@ export class ArticlesApiClient extends BaseApiClient {
   },
   context?: HttpContext
 
-): Observable<{
+): Promise<{
 'article': Article;
 }> {
 
-    return this.getArticle$Response(params,context).pipe(
-      map((r: StrictHttpResponse<{
+    return lastValueFrom(
+        this.getArticle$Response(params,context).pipe(
+            map((r: StrictHttpResponse<{
 'article': Article;
 }>) => r.body as {
 'article': Article;
 })
+        )
     );
   }
 
@@ -490,16 +497,18 @@ export class ArticlesApiClient extends BaseApiClient {
   },
   context?: HttpContext
 
-): Observable<{
+): Promise<{
 'article': Article;
 }> {
 
-    return this.updateArticle$Response(params,context).pipe(
-      map((r: StrictHttpResponse<{
+    return lastValueFrom(
+        this.updateArticle$Response(params,context).pipe(
+            map((r: StrictHttpResponse<{
 'article': Article;
 }>) => r.body as {
 'article': Article;
 })
+        )
     );
   }
 
@@ -565,10 +574,12 @@ export class ArticlesApiClient extends BaseApiClient {
   },
   context?: HttpContext
 
-): Observable<void> {
+): Promise<void> {
 
-    return this.deleteArticle$Response(params,context).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+    return lastValueFrom(
+        this.deleteArticle$Response(params,context).pipe(
+            map((r: StrictHttpResponse<void>) => r.body as void)
+        )
     );
   }
 

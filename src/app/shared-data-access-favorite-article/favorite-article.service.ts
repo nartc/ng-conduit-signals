@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
-import { lastValueFrom } from 'rxjs';
 import { Article, FavoritesApiClient } from '../shared-data-access-api';
 import { ApiStatus } from '../shared-data-access-models/api-status';
 
@@ -13,7 +12,7 @@ export class FavoriteArticleService {
 
     toggleFavorite(article: Article) {
         this.#status.set('loading');
-        return lastValueFrom(
+        return (
             article.favorited
                 ? this.#favoritesApiClient.deleteArticleFavorite({ slug: article.slug })
                 : this.#favoritesApiClient.createArticleFavorite({ slug: article.slug })

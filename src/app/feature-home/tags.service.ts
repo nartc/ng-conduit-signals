@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
-import { lastValueFrom } from 'rxjs';
 import { TagsApiClient } from '../shared-data-access-api';
 import { ApiStatus } from '../shared-data-access-models/api-status';
 
@@ -16,7 +15,8 @@ export class TagsService {
 
     getTags() {
         this.#status.set('loading');
-        lastValueFrom(this.#tagsApiClient.getTags())
+        this.#tagsApiClient
+            .getTags()
             .then((response) => {
                 this.#status.set('success');
                 this.#tags.set(response.tags);

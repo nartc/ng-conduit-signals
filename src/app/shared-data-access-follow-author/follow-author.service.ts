@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
-import { lastValueFrom } from 'rxjs';
 import { Profile, ProfileApiClient } from '../shared-data-access-api';
 import { ApiStatus } from '../shared-data-access-models/api-status';
 
@@ -14,7 +13,7 @@ export class FollowAuthorService {
 
     toggleFollow(profile: Profile) {
         this.#status.set('loading');
-        return lastValueFrom(
+        return (
             profile.following
                 ? this.#profileApiClient.unfollowUserByUsername({ username: profile.username })
                 : this.#profileApiClient.followUserByUsername({ username: profile.username })

@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
-import { defer, lastValueFrom } from 'rxjs';
 import { Article, ArticlesApiClient } from '../shared-data-access-api';
 import { FavoriteArticleService } from '../shared-data-access-favorite-article/favorite-article.service';
 import { ApiStatus } from '../shared-data-access-models/api-status';
@@ -27,15 +26,14 @@ export class HomeService {
         this.#feedType.set(type);
         this.#selectedTag.set(tag || '');
 
-        lastValueFrom(
-            defer(() => {
-                if (type === 'feed') return this.#articlesApiClient.getArticlesFeed();
-                if (type === 'tag' && tag) {
-                    return this.#articlesApiClient.getArticles({ tag });
-                }
-                return this.#articlesApiClient.getArticles();
-            })
-        )
+        const getArticlesPromise =
+            type === 'feed'
+                ? this.#articlesApiClient.getArticlesFeed.bind(this.#articlesApiClient)
+                : type === 'tag' && tag
+                ? this.#articlesApiClient.getArticles.bind(this.#articlesApiClient, { tag }, undefined) // undefined is HttpContext
+                : this.#articlesApiClient.getArticles.bind(this.#articlesApiClient);
+
+        getArticlesPromise()
             .then((response) => {
                 this.#status.set('success');
                 this.#articles.set(response.articles);

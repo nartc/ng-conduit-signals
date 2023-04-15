@@ -6,8 +6,7 @@ import { BaseApiClient } from '../base-api-client';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 import { RequestBuilder } from '../request-builder';
-import { Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { Observable, lastValueFrom, map, filter } from 'rxjs';
 
 import { Profile } from '../models/profile';
 
@@ -88,16 +87,18 @@ export class ProfileApiClient extends BaseApiClient {
   },
   context?: HttpContext
 
-): Observable<{
+): Promise<{
 'profile': Profile;
 }> {
 
-    return this.getProfileByUsername$Response(params,context).pipe(
-      map((r: StrictHttpResponse<{
+    return lastValueFrom(
+        this.getProfileByUsername$Response(params,context).pipe(
+            map((r: StrictHttpResponse<{
 'profile': Profile;
 }>) => r.body as {
 'profile': Profile;
 })
+        )
     );
   }
 
@@ -167,16 +168,18 @@ export class ProfileApiClient extends BaseApiClient {
   },
   context?: HttpContext
 
-): Observable<{
+): Promise<{
 'profile': Profile;
 }> {
 
-    return this.followUserByUsername$Response(params,context).pipe(
-      map((r: StrictHttpResponse<{
+    return lastValueFrom(
+        this.followUserByUsername$Response(params,context).pipe(
+            map((r: StrictHttpResponse<{
 'profile': Profile;
 }>) => r.body as {
 'profile': Profile;
 })
+        )
     );
   }
 
@@ -246,16 +249,18 @@ export class ProfileApiClient extends BaseApiClient {
   },
   context?: HttpContext
 
-): Observable<{
+): Promise<{
 'profile': Profile;
 }> {
 
-    return this.unfollowUserByUsername$Response(params,context).pipe(
-      map((r: StrictHttpResponse<{
+    return lastValueFrom(
+        this.unfollowUserByUsername$Response(params,context).pipe(
+            map((r: StrictHttpResponse<{
 'profile': Profile;
 }>) => r.body as {
 'profile': Profile;
 })
+        )
     );
   }
 

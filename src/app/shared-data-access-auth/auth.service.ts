@@ -1,7 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { lastValueFrom } from 'rxjs';
 import { User, UserAndAuthenticationApiClient } from '../shared-data-access-api';
 import { injectIsServer } from '../shared-utils/is-server';
 
@@ -31,13 +30,13 @@ export class AuthService {
             return;
         }
 
-        const currentUserResponse = await lastValueFrom(this.#userAndAuthenticationApiClient.getCurrentUser()).catch(
-            ({ error }: HttpErrorResponse) => {
+        const currentUserResponse = await this.#userAndAuthenticationApiClient
+            .getCurrentUser()
+            .catch(({ error }: HttpErrorResponse) => {
                 console.error(`error refreshing user -->`, error);
                 this.#user.set(null);
                 return { user: null };
-            }
-        );
+            });
 
         this.#user.set(currentUserResponse.user);
         this.#status.set(currentUserResponse.user ? 'authenticated' : 'unauthenticated');

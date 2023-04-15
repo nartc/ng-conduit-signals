@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, computed, inject, Injectable, signal } from '@angular/core';
-import { lastValueFrom } from 'rxjs';
 import { Profile, ProfileApiClient } from '../shared-data-access-api';
 import { AuthService } from '../shared-data-access-auth/auth.service';
 import { FollowAuthorService } from '../shared-data-access-follow-author/follow-author.service';
@@ -26,7 +25,8 @@ export class ProfileService {
 
     getProfile(username: string) {
         this.#status.set('loading');
-        lastValueFrom(this.#profileApiClient.getProfileByUsername({ username }))
+        this.#profileApiClient
+            .getProfileByUsername({ username })
             .then((response) => {
                 this.#status.set('success');
                 this.#profile.set(response.profile);
