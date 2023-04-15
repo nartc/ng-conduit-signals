@@ -17,6 +17,8 @@ export function app(): express.Express {
     const REDIS_CONNECTION_STRING = process.env['REDIS_CONNECTION_STRING'] || '';
     const INVALIDATE_TOKEN = process.env['INVALIDATE_TOKEN'] || '';
 
+    console.log('REDIS', REDIS_CONNECTION_STRING);
+
     const redisCacheHandler = REDIS_CONNECTION_STRING
         ? new RedisCacheHandler({ connectionString: REDIS_CONNECTION_STRING })
         : undefined;
