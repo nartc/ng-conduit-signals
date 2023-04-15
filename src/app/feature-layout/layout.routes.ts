@@ -5,6 +5,7 @@ export default [
     {
         path: '',
         loadComponent: () => import('../feature-home/home.component'),
+        data: { revalidate: 60 },
     },
     {
         path: 'settings',
@@ -25,15 +26,18 @@ export default [
         path: 'article/:slug',
         canMatch: [authGuard('protected')],
         loadComponent: () => import('../feature-article/article.component'),
+        data: { revalidate: 60 },
     },
     {
         path: 'register',
         canMatch: [authGuard('unprotected')],
         loadComponent: () => import('../feature-register/register.component'),
+        data: { revalidate: 60 },
     },
     {
         path: 'login',
         canMatch: [authGuard('unprotected')],
         loadComponent: () => import('../feature-login/login.component'),
+        data: { revalidate: 60 },
     },
 ] as Routes;
