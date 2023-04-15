@@ -9,7 +9,7 @@ import { ProfileService } from './profile.service';
 @Component({
     template: `
         <ng-container *ngIf="!profileService.isLoading(); else loading">
-            <ng-container *ngIf="profile">
+            <ng-container *ngIf="profileService.profile() as profile">
                 <app-ui-profile-user-info
                     [profile]="profile"
                     [isOwner]="profileService.isOwner()"
@@ -40,9 +40,5 @@ export default class Profile {
 
     @RouteInput() set username(username: string) {
         this.profileService.getProfile(username);
-    }
-
-    get profile() {
-        return this.profileService.profile();
     }
 }

@@ -11,7 +11,7 @@ import { ArticleService } from './article.service';
     standalone: true,
     template: `
         <ng-container *ngIf="!articleService.isLoading(); else loading">
-            <ng-container *ngIf="article">
+            <ng-container *ngIf="articleService.article() as article">
                 <div class="banner">
                     <div class="container">
                         <h1>{{ article.title }}</h1>
@@ -84,9 +84,5 @@ export default class Article {
 
     @RouteInput() set slug(slug: string) {
         this.articleService.getArticle(slug);
-    }
-
-    get article() {
-        return this.articleService.article()!;
     }
 }
