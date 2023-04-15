@@ -6,5 +6,5 @@
     "baseService": "BaseApiClient",
     "module": false,
     "indexFile": true,
-    "templates": "src/templates"
+    "templates": "templates"
 }
