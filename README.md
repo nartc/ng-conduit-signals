@@ -63,6 +63,6 @@ effect(() => {
 
 # Getting started
 
--   `npm install`
--   `npm run serve`
--   To serve SSR, `npm run dev:ssr`
+-   `yarn`
+-   `yarn serve`
+-   To serve SSR, `yarn dev:ssr`
