@@ -25,7 +25,7 @@ export class FollowAuthorService {
             .catch(({ error }: HttpErrorResponse) => {
                 console.error(`Error toggling follow for ${profile.username}`, error);
                 this.#status.set('error');
-                return null;
+                return Promise.reject(error);
             });
     }
 }

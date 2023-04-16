@@ -41,10 +41,13 @@ export class ProfileService {
     }
 
     toggleFollow(profile: Profile) {
-        this.#followAuthorService.toggleFollow(profile).then((response) => {
-            if (response) {
+        this.#followAuthorService
+            .toggleFollow(profile)
+            .then((response) => {
                 this.#profile.set(response);
-            }
-        });
+            })
+            .catch((error) => {
+                // TODO handle error
+            });
     }
 }
