@@ -5,6 +5,7 @@ import * as express from 'express';
 import { ISRHandler } from 'ngx-isr';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { environment } from 'src/environments/environment';
 import { RedisCacheHandler } from './redis-cache-handler';
 import bootstrap from './src/main.server';
 
@@ -24,8 +25,9 @@ export function app(): express.Express {
     const isr = new ISRHandler({
         indexHtml,
         cache: redisCacheHandler,
-        invalidateSecretToken: INVALIDATE_TOKEN || 'MY_TOKEN',
+        invalidateSecretToken: INVALIDATE_TOKEN,
         enableLogging: true,
+        buildId: environment.buildId,
     });
 
     // Our Universal express-engine (found @ https://github.com/angular/universal/tree/main/modules/express-engine)
