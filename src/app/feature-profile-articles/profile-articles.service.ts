@@ -41,15 +41,18 @@ export class ProfileArticlesService {
     }
 
     toggleFavorite(articleToToggle: Article) {
-        this.#favoriteArticleService.toggleFavorite(articleToToggle).then((response) => {
-            if (response) {
+        this.#favoriteArticleService
+            .toggleFavorite(articleToToggle)
+            .then((response) => {
                 this.#articles.update((articles) =>
                     articles.map((article) => {
                         if (article.slug === articleToToggle.slug) return response;
                         return article;
                     })
                 );
-            }
-        });
+            })
+            .catch((error) => {
+                // TODO handle error
+            });
     }
 }

@@ -1,1 +1,10 @@
-README.md
+/*
+!/api
+!/src
+!vercel.json
+!package.json
+!angular.json
+!tsconfig.json
+!tsconfig.*.json
+!server.ts
+!redis-cache-handler.ts

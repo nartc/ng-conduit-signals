@@ -24,7 +24,7 @@ export class FavoriteArticleService {
             .catch(({ error }: HttpErrorResponse) => {
                 console.error(`Error toggle favorite for ${article.slug}`, error);
                 this.#status.set('error');
-                return null;
+                return Promise.reject(error);
             });
     }
 }

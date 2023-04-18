@@ -75,11 +75,14 @@ export class ArticleService {
     }
 
     toggleFavorite(articleToToggle: Article) {
-        this.#favoriteArticleService.toggleFavorite(articleToToggle).then((response) => {
-            if (response) {
+        this.#favoriteArticleService
+            .toggleFavorite(articleToToggle)
+            .then((response) => {
                 this.#article.set(response);
-            }
-        });
+            })
+            .catch((error) => {
+                // TODO handle error
+            });
     }
 
     deleteArticle(slug: string) {
@@ -97,12 +100,10 @@ export class ArticleService {
         this.#followAuthorService
             .toggleFollow(profile)
             .then((response) => {
-                if (response) {
-                    this.#article.update((article) => ({ ...article!, author: response }));
-                }
+                this.#article.update((article) => ({ ...article!, author: response }));
             })
-            .catch(({ error }: HttpErrorResponse) => {
-                console.error(`Error toggle follow for ${profile.username}`, error);
+            .catch((error) => {
+                // TODO handle error
             });
     }
 
