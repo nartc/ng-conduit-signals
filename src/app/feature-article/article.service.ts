@@ -63,7 +63,7 @@ export class ArticleService {
                 this.#status.set('success');
                 this.#article.set(articleResponse.article);
                 this.#comments.set(commentsResponse.comments);
-                // TODO not sure why we still need this?
+                // TODO: not sure why we still need this?
                 this.#cdr.markForCheck();
             })
             .catch(({ error }: HttpErrorResponse) => {
@@ -81,7 +81,7 @@ export class ArticleService {
                 this.#article.set(response);
             })
             .catch((error) => {
-                // TODO handle error
+                // TODO: handle error
             });
     }
 
@@ -103,7 +103,7 @@ export class ArticleService {
                 this.#article.update((article) => ({ ...article!, author: response }));
             })
             .catch((error) => {
-                // TODO handle error
+                // TODO: handle error
             });
     }
 

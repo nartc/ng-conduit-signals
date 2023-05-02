@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { UpdateUser } from '../shared-data-access-api';
 import { SettingsService } from './settings.service';
@@ -87,15 +87,5 @@ import { SettingsService } from './settings.service';
 })
 export default class Settings {
     protected readonly settingsService = inject(SettingsService);
-    protected updateUser: UpdateUser = {};
-
-    constructor() {
-        effect(() => {
-            const user = this.settingsService.user();
-            if (user) {
-                this.updateUser = structuredClone(user);
-                this.updateUser.password = '';
-            }
-        });
-    }
+    protected updateUser: UpdateUser = structuredClone(this.settingsService.user() || {});
 }
