@@ -10,7 +10,7 @@
             "prefix": "app",
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-angular:browser",
+                    "builder": "@angular-devkit/build-angular:browser-esbuild",
                     "options": {
                         "outputPath": "dist/ng-conduit-signals/browser",
                         "index": "src/index.html",
@@ -45,10 +45,10 @@
                             "sourceMap": true,
                             "namedChunks": true,
                             "fileReplacements": [
-                              {
-                                "replace": "src/environments/environment.ts",
-                                "with": "src/environments/environment.development.ts"
-                              }
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.development.ts"
+                                }
                             ]
                         }
                     },
@@ -74,63 +74,62 @@
                     }
                 },
                 "server": {
-                  "builder": "@angular-devkit/build-angular:server",
-                  "options": {
-                    "outputPath": "dist/ng-conduit-signals/server",
-                    "main": "server.ts",
-                    "tsConfig": "tsconfig.server.json"
-                  },
-                  "configurations": {
-                    "production": {
-                      "outputHashing": "media"
+                    "builder": "@angular-devkit/build-angular:server",
+                    "options": {
+                        "outputPath": "dist/ng-conduit-signals/server",
+                        "main": "server.ts",
+                        "tsConfig": "tsconfig.server.json"
                     },
-                    "development": {
-                      "optimization": false,
-                      "sourceMap": true,
-                      "extractLicenses": false,
-                      "vendorChunk": true,
-                      "fileReplacements": [
-                        {
-                          "replace": "src/environments/environment.ts",
-                          "with": "src/environments/environment.development.ts"
+                    "configurations": {
+                        "production": {
+                            "outputHashing": "media"
+                        },
+                        "development": {
+                            "optimization": false,
+                            "sourceMap": true,
+                            "extractLicenses": false,
+                            "vendorChunk": true,
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.development.ts"
+                                }
+                            ],
+                            "buildOptimizer": false
                         }
-                      ]
-                    }
-                  },
-                  "defaultConfiguration": "production"
+                    },
+                    "defaultConfiguration": "production"
                 },
                 "serve-ssr": {
-                  "builder": "@nguniversal/builders:ssr-dev-server",
-                  "configurations": {
-                    "development": {
-                      "browserTarget": "ng-conduit-signals:build:development",
-                      "serverTarget": "ng-conduit-signals:server:development"
+                    "builder": "@nguniversal/builders:ssr-dev-server",
+                    "configurations": {
+                        "development": {
+                            "browserTarget": "ng-conduit-signals:build:development",
+                            "serverTarget": "ng-conduit-signals:server:development"
+                        },
+                        "production": {
+                            "browserTarget": "ng-conduit-signals:build:production",
+                            "serverTarget": "ng-conduit-signals:server:production"
+                        }
                     },
-                    "production": {
-                      "browserTarget": "ng-conduit-signals:build:production",
-                      "serverTarget": "ng-conduit-signals:server:production"
-                    }
-                  },
-                  "defaultConfiguration": "development"
+                    "defaultConfiguration": "development"
                 },
                 "prerender": {
-                  "builder": "@nguniversal/builders:prerender",
-                  "options": {
-                    "routes": [
-                      "/"
-                    ]
-                  },
-                  "configurations": {
-                    "production": {
-                      "browserTarget": "ng-conduit-signals:build:production",
-                      "serverTarget": "ng-conduit-signals:server:production"
+                    "builder": "@nguniversal/builders:prerender",
+                    "options": {
+                        "routes": ["/"]
                     },
-                    "development": {
-                      "browserTarget": "ng-conduit-signals:build:development",
-                      "serverTarget": "ng-conduit-signals:server:development"
-                    }
-                  },
-                  "defaultConfiguration": "production"
+                    "configurations": {
+                        "production": {
+                            "browserTarget": "ng-conduit-signals:build:production",
+                            "serverTarget": "ng-conduit-signals:server:production"
+                        },
+                        "development": {
+                            "browserTarget": "ng-conduit-signals:build:development",
+                            "serverTarget": "ng-conduit-signals:server:development"
+                        }
+                    },
+                    "defaultConfiguration": "production"
                 }
             }
         }
