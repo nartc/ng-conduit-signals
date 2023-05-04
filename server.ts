@@ -2,7 +2,7 @@ import 'zone.js/node';
 
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import * as express from 'express';
-import { ISRHandler } from 'ngx-isr';
+import { ISRHandler } from 'ngx-isr/server';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { environment } from 'src/environments/environment';

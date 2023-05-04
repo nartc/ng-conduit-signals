@@ -1,5 +1,5 @@
 import Redis from 'ioredis';
-import { CacheData, CacheHandler, ISROptions } from 'ngx-isr';
+import { CacheData, CacheHandler, ISROptions } from 'ngx-isr/models';
 
 type RedisCacheHandlerOptions = {
     /**
